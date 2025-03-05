@@ -1,12 +1,22 @@
-import { View, Text } from "react-native";
+import { router } from "expo-router";
+import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const WelcomeScreen = () => {
   return (
-    <SafeAreaView>
-      <View>
-        <Text className="text-blue-500 border border">Welcome to the health-trkr app!</Text>
+    <SafeAreaView className="flex items-center">
+      <View className="p-5 w-full">
+        <Text className="text-blue-500 text-center font-bold text-lg">Welcome to the health-trkr app!</Text>
       </View>
+
+      <TouchableOpacity
+        className="m-5 border border-2 flex flex-wrap rounded-full border-blue-500"
+        onPress={ () => {
+          router.replace("../home");
+        } }
+      >
+        <Text className="px-5 py-3 text-center font-semibold text-orange-500 text-md underline">Continue</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }
