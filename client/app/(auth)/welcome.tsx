@@ -5,8 +5,10 @@ const WelcomeScreen = () => {
   return (
     <SafeAreaView>
       <View>
-        <Text>Welcome to the app!</Text>
+        <Text className="text-blue-500 border border">Welcome to the health-trkr app!</Text>
       </View>
     </SafeAreaView>
   )
 }
+
+export default WelcomeScreen;
