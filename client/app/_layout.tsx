@@ -29,7 +29,7 @@ export default function RootLayout() {
 
   return (
     <Stack>
-      <Stack.Screen name='index' options={{ }}/> {/* Direct to welcome page */}
+      <Stack.Screen name='index' options={{ headerShown: false }}/> {/* Direct to welcome page */}
       <Stack.Screen name='(auth)' options={{ headerShown: false }}/>
       <Stack.Screen name='(root)' options={{ headerShown: false }}/>
     </Stack>

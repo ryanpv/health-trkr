@@ -1,9 +1,31 @@
+import { icons } from '@/constants';
 import { Tabs } from 'expo-router';
+import { Image, ImageSourcePropType, View } from 'react-native';
+
+
+
 
 const TabsLayout = () => {
+  const TabIcon = ({
+    source,
+    focused
+  } : {
+    source: ImageSourcePropType,
+    focused: boolean
+  }) => (
+    <View>
+      <Image
+        source={source}
+        tintColor={ `${ focused ? "#71B8CA" : "#cbd5e1" }` }
+        resizeMode='contain'
+        className='w-6 h-6'
+      />
+    </View>
+  );
+
   return (
     <Tabs
-      initialRouteName='index'
+      // initialRouteName='index'
       screenOptions={{
         tabBarActiveTintColor: "white",
         // tabBarInactiveTintColor: "white",
@@ -19,14 +41,11 @@ const TabsLayout = () => {
           padding: 10,
           paddingBottom: 10,
           overflow: 'hidden',
-          borderRadius: 25,
-          marginHorizontal: 20,
-          marginBottom: 20,
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: 'bold',
-          alignContent: 'flex-end'
+          alignContent: 'flex-end',
         }
       }}
     >
@@ -51,7 +70,12 @@ const TabsLayout = () => {
         options={{ 
           title: 'Home',
           headerShown: false,
-          // tabBarIcon: () => ()
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              focused={ focused }
+              source={ icons.profile }
+            />
+          )
         }}
       />
       <Tabs.Screen
