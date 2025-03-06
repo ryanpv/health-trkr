@@ -16,9 +16,9 @@ const TabsLayout = () => {
     <View>
       <Image
         source={source}
-        tintColor={ `${ focused ? "#71B8CA" : "#cbd5e1" }` }
+        tintColor={ `${ focused ? "orange" : "#cbd5e1" }` }
         resizeMode='contain'
-        className='w-6 h-6'
+        className='w-5 h-5'
       />
     </View>
   );
@@ -28,13 +28,17 @@ const TabsLayout = () => {
       // initialRouteName='index'
       screenOptions={{
         tabBarActiveTintColor: "white",
-        // tabBarInactiveTintColor: "white",
+        tabBarInactiveTintColor: "white",
         tabBarShowLabel: true,
         tabBarLabelPosition: "below-icon",
+        tabBarItemStyle: {
+          // flex: 1,
+        },
         tabBarStyle: {
-          backgroundColor: "#333333",
+          backgroundColor: "#66A2FF",
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-around',
+          flexDirection: 'row',
           alignItems: 'center',
           position: 'absolute',
           height: 76,
@@ -43,9 +47,7 @@ const TabsLayout = () => {
           overflow: 'hidden',
         },
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: 'bold',
-          alignContent: 'flex-end',
+          textAlign: 'center',
         }
       }}
     >
@@ -62,7 +64,12 @@ const TabsLayout = () => {
         options={{ 
           title: 'Quests',
           headerShown: false,
-          // tabBarIcon: () => ()
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              focused={ focused }
+              source={ icons.check }
+            />
+          )
         }}
       />
       <Tabs.Screen
@@ -73,7 +80,7 @@ const TabsLayout = () => {
           tabBarIcon: ({ focused }) => (
             <TabIcon
               focused={ focused }
-              source={ icons.profile }
+              source={ icons.home }
             />
           )
         }}
