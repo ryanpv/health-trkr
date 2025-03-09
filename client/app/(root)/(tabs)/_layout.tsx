@@ -41,9 +41,9 @@ const TabsLayout = () => {
           flexDirection: 'row',
           alignItems: 'center',
           position: 'absolute',
-          height: 76,
-          padding: 10,
-          paddingBottom: 10,
+          height: 70,
+          // padding: 25,
+          // paddingBottom: 20,
           overflow: 'hidden',
         },
         tabBarLabelStyle: {
@@ -90,7 +90,12 @@ const TabsLayout = () => {
         options={{ 
           title: 'Profile',
           headerShown: false,
-          // tabBarIcon: () => ()
+          tabBarIcon: () => (
+            <TabIcon
+              focused={ false }
+              source={ icons.profile}
+            />
+          )
         }}
       />
     </Tabs>
