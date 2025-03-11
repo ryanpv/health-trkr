@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { useState } from "react";
-import  { useForm, Controller, SubmitHandler } from "react-hook-form";
+import  { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 
 
 type FormData = {
@@ -12,7 +12,7 @@ type FormData = {
 }
 
 const Signup = () => {
-  const { register, setValue, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { register, watch, setValue, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       name: '',
       email: '',
@@ -25,6 +25,8 @@ const Signup = () => {
   const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
     console.log("data: ", data);
   }
+
+  const password = watch("password")
 
   return (
     <SafeAreaView className="bg-gray-300 h-full">
@@ -43,6 +45,7 @@ const Signup = () => {
             <Controller
               control={control}
               name="name"
+              rules={{ required: true}}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   placeholder="Enter your name"
@@ -54,12 +57,17 @@ const Signup = () => {
                 />
               )}
             />
+
+            <Text style={ {marginHorizontal: styles.input.marginHorizontal, color: 'red' } }>
+              { errors.name ? "Name is required." : ""}
+            </Text>            
           </View>
 
           <View>
             <Controller
               control={control}
               name="email"
+              rules={{ required: true}}
               render={({ field: { onChange, onBlur, value }}) => (
                 <TextInput
                   placeholder="Enter your email"
@@ -71,12 +79,24 @@ const Signup = () => {
                 />
               )}
             />
+
+            <Text style={ {marginHorizontal: styles.input.marginHorizontal, color: 'red' } }>
+              { errors.email ? "Email is required." : ""}
+            </Text> 
           </View>
 
           <View>
             <Controller
               control={control}
               name="password"
+              rules={{ 
+                required: "Password is required",
+                minLength: { value: 8, message: "Password must be at least 8 characters" },
+                pattern: {
+                  value: /^(?=.*[A-Z])(?=.*\d).{8,}$/,
+                  message: "Password must contain at least one uppercase letter and one number",
+                },
+              }}
               render={({ field: { onChange, onBlur, value }}) => (
                 <TextInput
                   placeholder="Enter password"
@@ -85,18 +105,25 @@ const Signup = () => {
                   onBlur={ onBlur }
                   onChangeText={ onChange }
                   value={ value }
-                  secureTextEntry
-                  textContentType="password"
-                  passwordRules="required: upper; required: lower; required: digit; minlength: 8;"
+                  secureTextEntry={true}
+                  textContentType="oneTimeCode"
                 />
               )}
             />
+
+            <Text style={ {marginHorizontal: styles.input.marginHorizontal, color: 'red' } }>
+              { errors.password ? `${ errors.password.message }` : ""}
+            </Text> 
           </View>
 
           <View>
             <Controller
               control={control}
               name="confirmPassword"
+              rules={{ 
+                required: true,
+                validate: (value) => value === password || "Passwords do not match."
+              }}
               render={({ field: { onChange, onBlur, value }}) => (
                 <TextInput
                   placeholder="Confirm password"
@@ -105,12 +132,15 @@ const Signup = () => {
                   onBlur={ onBlur }
                   onChangeText={ onChange }
                   value={ value }
-                  secureTextEntry
-                  textContentType="password"
-                  passwordRules="required: upper; required: lower; required: digit; minlength: 8;"
+                  secureTextEntry={true}
+                  textContentType="oneTimeCode"
                 />
               )}
             />
+
+            <Text style={ {marginHorizontal: styles.input.marginHorizontal, color: 'red' } }>
+              { errors.confirmPassword ? `${ errors.confirmPassword.message }` : ""}
+            </Text> 
           </View>
         </View>
 
