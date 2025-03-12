@@ -1,39 +1,21 @@
 import { icons } from '@/constants';
 import { Tabs } from 'expo-router';
 import { Image, ImageSourcePropType, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 
 
 
 const TabsLayout = () => {
-  const TabIcon = ({
-    source,
-    focused
-  } : {
-    source: ImageSourcePropType,
-    focused: boolean
-  }) => (
-    <View>
-      <Image
-        source={source}
-        tintColor={ `${ focused ? "orange" : "#cbd5e1" }` }
-        resizeMode='contain'
-        className='w-5 h-5'
-      />
-    </View>
-  );
+
 
   return (
     <Tabs
-      // initialRouteName='index'
       screenOptions={{
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "white",
         tabBarShowLabel: true,
         tabBarLabelPosition: "below-icon",
-        tabBarItemStyle: {
-          // flex: 1,
-        },
         tabBarStyle: {
           backgroundColor: "#66A2FF",
           display: 'flex',
@@ -41,14 +23,15 @@ const TabsLayout = () => {
           flexDirection: 'row',
           alignItems: 'center',
           position: 'absolute',
-          height: 70,
-          // padding: 25,
-          // paddingBottom: 20,
-          overflow: 'hidden',
+          height: 80,
+          // overflow: 'hidden',
+          
         },
         tabBarLabelStyle: {
-          textAlign: 'center',
-        }
+          // textAlign: 'center',
+          fontSize: 12,
+          // color: 'white',
+        },
       }}
     >
       <Tabs.Screen
@@ -56,7 +39,14 @@ const TabsLayout = () => {
         options={{ 
           title: 'Explore',
           headerShown: false,
-          // tabBarIcon: () => ()
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              name='rocket'
+              size={25}
+              color={ focused ? "orange" : "#cbd5e1" }
+            />
+          ),
+          tabBarLabel: 'Explore',
         }}
       />
       <Tabs.Screen
@@ -65,11 +55,13 @@ const TabsLayout = () => {
           title: 'Quests',
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon
-              focused={ focused }
-              source={ icons.check }
+            <Icon
+              name='reader'
+              size={25}
+              color={ focused ? "orange" : "#cbd5e1" }
             />
-          )
+          ),
+          tabBarLabel: 'Quests',
         }}
       />
       <Tabs.Screen
@@ -78,11 +70,13 @@ const TabsLayout = () => {
           title: 'Home',
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon
-              focused={ focused }
-              source={ icons.home }
+            <Icon
+              name='home'
+              size={25}
+              color={ focused ? "orange" : "#cbd5e1" }
             />
-          )
+          ),
+          tabBarLabel: 'Home',
         }}
       />
       <Tabs.Screen
@@ -90,12 +84,14 @@ const TabsLayout = () => {
         options={{ 
           title: 'Profile',
           headerShown: false,
-          tabBarIcon: () => (
-            <TabIcon
-              focused={ false }
-              source={ icons.profile}
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              name='id-card'
+              size={25}
+              color={ focused ? "orange" : "#cbd5e1" }
             />
-          )
+          ),
+          tabBarLabel: 'Profile',
         }}
       />
     </Tabs>
