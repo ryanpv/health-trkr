@@ -1,15 +1,75 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { icons } from "@/constants";
+import RouteLink from "@/app/components/routeLink";
 
 const Profile = () => {
 
   return (
-    <SafeAreaView>
-      <Text>Profile Page</Text>
-      <View>
+    <SafeAreaView className="bg-blue-400 h-screen p-5 flex items-center">
+      <View className="flex max-w-lg w-full p-5">
+        <View className="flex flex-row items-end gap-x-5">
+          <View>
+            <Image source={ icons.profile } />
+          </View>
 
-      <Icon name="walk" size={30} color="orange" />
+          <View>
+            <Text className="font-semibold text-white text-xl">Full Name</Text>
+            <Text className="font-semibold text-gray-200">Username | Member since ****</Text>
+          </View>
+        </View>
+
+        <View className="flex flex-row gap-x-3 justify-center mt-10 mb-5">
+          <View className="flex-1 rounded-md p-3 bg-blue-200 items-center justify-enter">
+            <Text className="text-blue-400 font-bold">80</Text>
+            <Text className="font-semibold text-gray-400 text-md text-center">Daily Streak</Text>
+          </View>
+
+          <View className="flex-1 rounded-md p-3 bg-blue-200 items-center justify-enter">
+            <Text className="text-blue-400 font-bold l">11</Text>
+            <Text className="font-semibold text-gray-400 text-md text-center">Weekly Streak</Text>
+          </View>
+        </View>
+
+        <View className="bg-blue-200 p-5 rounded-md space-y-5">
+          <Text className="font-semibold text-lg">Account</Text>
+          <RouteLink 
+            routeName="Personal Data" 
+            icon={ { name: "id-card", size: 20, color: "red"} } 
+            link="./personal-data"
+          />
+          <RouteLink 
+            routeName="Personal Data" 
+            icon={ { name: "id-card", size: 20, color: "red"} } 
+            link="./personal-data"
+          />
+          <RouteLink 
+            routeName="Personal Data" 
+            icon={ { name: "id-card", size: 20, color: "red"} } 
+            link="./personal-data"
+          />
+        </View>
+
+        <View className="bg-blue-200 p-5 rounded-md space-y-5 mt-5">
+          <Text className="font-semibold text-lg">Other</Text>
+          <RouteLink 
+            routeName="Contact Us" 
+            icon={ { name: "id-card", size: 20, color: "red"} } 
+            link="./contact"
+          />
+          <RouteLink 
+            routeName="Privacy Policy" 
+            icon={ { name: "id-card", size: 20, color: "red"} } 
+            link="./privacy"
+          />
+          <RouteLink 
+            routeName="Settings" 
+            icon={ { name: "id-card", size: 20, color: "red"} } 
+            link="./settings"
+          />
+        </View>
+
       </View>
     </SafeAreaView>
   )
