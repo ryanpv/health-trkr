@@ -20,7 +20,12 @@ const Profile = () => {
           </View>
         </View>
 
-        <View className="flex flex-row gap-x-3 justify-center mt-10 mb-5">
+        <View className="bg-blue-200 p-5 rounded-md mt-10 flex flex-row gap-x-3">
+          <Icon name="sparkles" size={ 30 } color={ "#ebc61e"}/>
+          <Text className="text-gray-600 font-semibold">Total points: </Text>
+        </View>
+
+        <View className="flex flex-row gap-x-3 justify-center my-5">
           <View className="flex-1 rounded-md p-3 bg-blue-200 items-center justify-enter">
             <Text className="text-blue-400 font-bold">80</Text>
             <Text className="font-semibold text-gray-400 text-md text-center">Daily Streak</Text>

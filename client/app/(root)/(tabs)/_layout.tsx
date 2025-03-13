@@ -43,7 +43,7 @@ const TabsLayout = () => {
             <Icon
               name='rocket'
               size={25}
-              color={ focused ? "orange" : "#cbd5e1" }
+              color={ focused ? "#ebc61e" : "#cbd5e1" }
             />
           ),
           tabBarLabel: 'Explore',
@@ -58,7 +58,7 @@ const TabsLayout = () => {
             <Icon
               name='reader'
               size={25}
-              color={ focused ? "orange" : "#cbd5e1" }
+              color={ focused ? "#ebc61e" : "#cbd5e1" }
             />
           ),
           tabBarLabel: 'Quests',
@@ -73,7 +73,7 @@ const TabsLayout = () => {
             <Icon
               name='home'
               size={25}
-              color={ focused ? "orange" : "#cbd5e1" }
+              color={ focused ? "#ebc61e" : "#cbd5e1" }
             />
           ),
           tabBarLabel: 'Home',
@@ -88,7 +88,7 @@ const TabsLayout = () => {
             <Icon
               name='id-card'
               size={25}
-              color={ focused ? "orange" : "#cbd5e1" }
+              color={ focused ? "#ebc61e" : "#cbd5e1" }
             />
           ),
           tabBarLabel: 'Profile',
