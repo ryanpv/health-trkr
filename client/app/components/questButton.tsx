@@ -6,7 +6,7 @@ const QuestButton = () => { // Params: questName, icon/questType?
 
   return (
     <TouchableOpacity 
-      className="m-5"
+      className=""
       onPress={ () => {} }
     >
       <View 
