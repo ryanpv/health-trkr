@@ -4,7 +4,7 @@ import { Text } from "react-native"
 const Quests = () => {
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="bg-blue-400 min-h-screen">
       <Text>Quests Page</Text>
     </SafeAreaView>
   )
