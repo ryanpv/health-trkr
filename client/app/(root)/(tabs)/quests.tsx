@@ -1,11 +1,10 @@
-import { SafeAreaView } from "react-native-safe-area-context"
-import { View, Text } from "react-native"
+import { View, Text, ScrollView } from "react-native"
 import QuestButton from "@/app/components/questButton";
 
 const Quests = () => {
 
   return (
-    <SafeAreaView className="bg-blue-400 min-h-screen p-5 flex items-center">
+    <ScrollView className="bg-blue-400 min-h-screen pb-20 p-5 flex items-center">
       <View className="flex max-w-xl w-full p-5">
         <View className="flex flex-row justify-between my-10">
           <Text className="text-2xl font-semibold text-gray-800">Total Points: 0000</Text>
@@ -41,7 +40,7 @@ const Quests = () => {
           <QuestButton />
         </View>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   )
 }
 

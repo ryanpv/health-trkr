@@ -1,14 +1,14 @@
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Text } from "react-native";
 
-const Explore = () => {
+const Rewards = () => {
   
   return (
     <SafeAreaView>
-      <Text>Explore Page</Text>
+      <Text>Rewards Page</Text>
     </SafeAreaView>
   )
 }
 
-export default Explore;
+export default Rewards;
 

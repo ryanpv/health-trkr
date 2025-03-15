@@ -35,9 +35,24 @@ const TabsLayout = () => {
       }}
     >
       <Tabs.Screen
-        name='explore'
+        name='home'
         options={{ 
-          title: 'Explore',
+          title: 'Home',
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              name='home'
+              size={25}
+              color={ focused ? "#ebc61e" : "#cbd5e1" }
+            />
+          ),
+          tabBarLabel: 'Home',
+        }}
+      />
+      <Tabs.Screen
+        name='rewards'
+        options={{ 
+          title: 'Rewards',
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Icon
@@ -46,7 +61,7 @@ const TabsLayout = () => {
               color={ focused ? "#ebc61e" : "#cbd5e1" }
             />
           ),
-          tabBarLabel: 'Explore',
+          tabBarLabel: 'Rewards',
         }}
       />
       <Tabs.Screen
@@ -62,21 +77,6 @@ const TabsLayout = () => {
             />
           ),
           tabBarLabel: 'Quests',
-        }}
-      />
-      <Tabs.Screen
-        name='home'
-        options={{ 
-          title: 'Home',
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              name='home'
-              size={25}
-              color={ focused ? "#ebc61e" : "#cbd5e1" }
-            />
-          ),
-          tabBarLabel: 'Home',
         }}
       />
       <Tabs.Screen
