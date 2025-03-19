@@ -1,12 +1,11 @@
-import { SafeAreaView } from "react-native-safe-area-context"
-import { Text } from "react-native";
+import { ScrollView, Text } from "react-native";
 
 const Rewards = () => {
   
   return (
-    <SafeAreaView>
+    <ScrollView className="bg-blue-400 min-h-screen pb-20 p-5 flex items-center">
       <Text>Rewards Page</Text>
-    </SafeAreaView>
+    </ScrollView>
   )
 }
 
