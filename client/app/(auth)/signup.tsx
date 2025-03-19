@@ -2,7 +2,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { useState } from "react";
 import  { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
-
+import auth from '@react-native-firebase/auth';
 
 type FormData = {
   name: string;
@@ -19,11 +19,12 @@ const Signup = () => {
       password: '',
       confirmPassword: ''
     }
-  })
-  ;
+  });
 
-  const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
+  const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
     console.log("data: ", data);
+    const createUser = await auth().createUserWithEmailAndPassword(data.email, data.password);
+    console.log("createUser: ", createUser);
   }
 
   const password = watch("password")
