@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, NativeSyntheticEve
 import { useState } from "react";
 import  { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 type FormData = {
   name: string;
@@ -12,10 +12,9 @@ type FormData = {
   confirmPassword: string;
 }
 
-const auth = getAuth();
 
 const Signup = () => {
-  const { register, watch, setValue, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { watch, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       name: '',
       email: '',
@@ -27,12 +26,10 @@ const Signup = () => {
   const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
     console.log("data: ", data);
     const createUser = await createUserWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password);
-    console.log("createUser: ", createUser);
-    // const createUser = await FIREBASE_AUTH.createUserWithEmailAndPassword(data.email, data.password);
-    // console.log("createUser: ", createUser);
-  }
+    console.log("createUser: ", createUser.user);
+  };
 
-  const password = watch("password")
+  const password = watch("password");
 
   return (
     <SafeAreaView className="bg-gray-300 h-full">
