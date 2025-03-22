@@ -2,7 +2,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { useState } from "react";
 import  { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
-import auth from '@react-native-firebase/auth';
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 type FormData = {
   name: string;
@@ -10,6 +11,8 @@ type FormData = {
   password: string;
   confirmPassword: string;
 }
+
+const auth = getAuth();
 
 const Signup = () => {
   const { register, watch, setValue, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
@@ -23,8 +26,10 @@ const Signup = () => {
 
   const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
     console.log("data: ", data);
-    const createUser = await auth().createUserWithEmailAndPassword(data.email, data.password);
+    const createUser = await createUserWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password);
     console.log("createUser: ", createUser);
+    // const createUser = await FIREBASE_AUTH.createUserWithEmailAndPassword(data.email, data.password);
+    // console.log("createUser: ", createUser);
   }
 
   const password = watch("password")
