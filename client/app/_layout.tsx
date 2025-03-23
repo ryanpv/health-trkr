@@ -8,6 +8,9 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -17,6 +20,19 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+  // Firebase auth state change listener
+  useEffect(() => {
+    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      if (user) {
+        console.log("USER LOGGED IN: ", user);
+        const uid = user.uid;
+      } else {
+        console.log("USER NOT LOGGED IN");
+      }
+    });
+  }, []);
+
+  // Hide splash screen when app is loaded
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -26,6 +42,7 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+
 
   return (
     <Stack>
