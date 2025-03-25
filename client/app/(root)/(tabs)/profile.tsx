@@ -3,8 +3,16 @@ import { Image, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { icons } from "@/constants";
 import RouteLink from "@/app/components/routeLink";
+import { useAuthContext } from "../context";
+import { useEffect } from "react";
 
 const Profile = () => {
+  const { currentUser } = useAuthContext();
+
+  useEffect(() => {
+    console.log("Current User in Profile: ", currentUser);
+
+  })
 
   return (
     <SafeAreaView className="bg-blue-400 h-screen p-5 flex items-center">
