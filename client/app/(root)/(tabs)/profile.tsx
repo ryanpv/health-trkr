@@ -1,18 +1,19 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { icons } from "@/constants";
 import RouteLink from "@/app/components/routeLink";
 import { useAuthContext } from "../context";
 import { useEffect } from "react";
 
+import LogoutModal from "@/app/components/logoutModal";
+
 const Profile = () => {
   const { currentUser } = useAuthContext();
 
   useEffect(() => {
     console.log("Current User in Profile: ", currentUser);
-
-  })
+  });
 
   return (
     <SafeAreaView className="bg-blue-400 h-screen p-5 flex items-center">
@@ -34,12 +35,12 @@ const Profile = () => {
         </View>
 
         <View className="flex flex-row gap-x-3 justify-center my-5">
-          <View className="flex-1 rounded-md p-3 bg-blue-200 items-center justify-enter shadow shadow-xl">
+          <View className="flex-1 rounded-md p-3 bg-blue-200 items-center justify-center shadow shadow-xl">
             <Text className="text-blue-400 font-bold">80</Text>
             <Text className="font-semibold text-gray-400 text-md text-center">Daily Streak</Text>
           </View>
 
-          <View className="flex-1 rounded-md p-3 bg-blue-200 items-center justify-enter shadow shadow-xl">
+          <View className="flex-1 rounded-md p-3 bg-blue-200 items-center justify-center shadow shadow-xl">
             <Text className="text-blue-400 font-bold l">11</Text>
             <Text className="font-semibold text-gray-400 text-md text-center">Weekly Streak</Text>
           </View>
@@ -78,9 +79,10 @@ const Profile = () => {
           />
           <RouteLink 
             routeName="Settings" 
-            icon={ { name: "id-card", size: 20, color: "red"} } 
+            icon={ { name: "cog-sharp", size: 20, color: "red"} } 
             link="./settings"
           />
+          <LogoutModal />
         </View>
 
       </View>
