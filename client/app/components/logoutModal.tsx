@@ -7,19 +7,19 @@ const LogoutModal = () => {
 
   return (
     <View>
-      <View className="flex bg-white border border-2 border-red-600 mx-auto">
+      <View>
         <Modal
           visible={ modalVisible }
           animationType="slide"
           transparent={ true }
         >
-          <View className="bg-blue-500 flex items-center justify-center m-auto p-5 rounded-md max-w-xs w-full">
-            <Text className="font-bold text-xl text-white">Log out?</Text>
+          <View className="bg-blue-500 flex items-center justify-center m-auto p-5 rounded-md max-w-xs w-full shadow shadow-xl">
+            <Text className="font-semibold text-xl text-white">Log out?</Text>
             <View className="flex flex-row gap-x-5 justify-center my-5">
               <TouchableOpacity
                 onPress={ () => setModalVisible(false) }
                 >
-                <View className="flex-1 rounded-md bg-red-500 p-3 items-center justify-center shadow shadow-xl w-24">
+                <View className="flex-1 rounded-md bg-red-400 p-2 items-center justify-center shadow shadow-xl w-24">
                   <Text className="text-white font-semibold text-lg">Yes</Text>
                 </View>
               </TouchableOpacity>
@@ -27,7 +27,7 @@ const LogoutModal = () => {
               <TouchableOpacity
                 onPress={ () => setModalVisible(false) }
                 >
-                <View className="flex-1 rounded-md bg-blue-200 p-3 items-center justify-center w-24">
+                <View className="flex-1 rounded-md bg-blue-200 p-2 items-center justify-center w-24">
                     <Text className="font-semibold text-gray-500 text-lg">No</Text>
                 </View>
               </TouchableOpacity>

@@ -1,23 +1,18 @@
 import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <SafeAreaView className='h-screen bg-black'>
+        <View className='bg-black h-full flex items-center justify-center space-y-5'>
+          <Text className='text-white text-3xl font-semibold'>Oops! Page not found.</Text>
+          <Link href="/" className='text-white text-lg'>Return to home page</Link>
+        </View>
+      </SafeAreaView>
+
+      <Stack.Screen options={{ headerShown: false }} />
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-});
