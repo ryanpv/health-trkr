@@ -12,13 +12,13 @@ const Home = () => {
       if (user) {
         console.log("USER LOGGED IN: ", user);
         const uid = user.uid;
+        // return <Redirect href="./(auth)/welcome" />
       } else {
         console.log("USER NOT LOGGED IN");
       }
     });
   }, []);
 
-  // return <Redirect href="./(auth)/welcome" />
   return (
     <SafeAreaView className="flex items-center">
       <View className="p-5 w-full">

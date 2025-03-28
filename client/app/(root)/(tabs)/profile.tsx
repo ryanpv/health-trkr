@@ -1,19 +1,46 @@
-import { SafeAreaView } from "react-native-safe-area-context";
+// External libraries
+import { useEffect, useState } from "react";
 import { Image, Text, View, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
-import { icons } from "@/constants";
-import RouteLink from "@/app/components/routeLink";
-import { useAuthContext } from "../context";
-import { useEffect } from "react";
+import { useRouter } from "expo-router";
 
-import LogoutModal from "@/app/components/logoutModal";
+// Firebase auth
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { signOut } from "firebase/auth";
+
+// Context
+import { useAuthContext } from "../context"; // Custom authentication context
+
+// Components
+import RouteLink from "@/app/components/routeLink"; // Navigation link component
+import LogoutModal from "@/app/components/logoutModal"; // Logout confirmation modal
+
+// Constants
+import { icons } from "@/constants"; // Icon assets
 
 const Profile = () => {
   const { currentUser } = useAuthContext();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     console.log("Current User in Profile: ", currentUser);
   });
+
+  const logout = async () => {
+    try {
+      const userSignOut = await signOut(FIREBASE_AUTH);
+      setModalVisible(false);
+      console.log("User logged out: ", userSignOut);
+
+      router.replace("/login");      
+    } catch (error) {
+      console.error("Error: ", error);
+      setError("Error logging out. Please try again.");
+    }
+  };
 
   return (
     <SafeAreaView className="bg-blue-400 h-screen p-5 flex items-center">
@@ -82,7 +109,7 @@ const Profile = () => {
             icon={ { name: "cog-sharp", size: 20, color: "red"} } 
             link="./settings"
           />
-          <LogoutModal />
+          <LogoutModal logout={ logout } />
         </View>
 
       </View>

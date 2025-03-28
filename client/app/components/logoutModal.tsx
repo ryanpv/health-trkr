@@ -2,7 +2,11 @@ import { useState } from "react";
 import { View, Modal, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-const LogoutModal = () => {
+type LogoutModalProps = {
+  logout: () => void;
+};
+
+const LogoutModal: React.FC<LogoutModalProps> = ({ logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -17,8 +21,8 @@ const LogoutModal = () => {
             <Text className="font-semibold text-xl text-white">Log out?</Text>
             <View className="flex flex-row gap-x-5 justify-center my-5">
               <TouchableOpacity
-                onPress={ () => setModalVisible(false) }
-                >
+                onPress={ logout }
+              >
                 <View className="flex-1 rounded-md bg-red-400 p-2 items-center justify-center shadow shadow-xl w-24">
                   <Text className="text-white font-semibold text-lg">Yes</Text>
                 </View>
