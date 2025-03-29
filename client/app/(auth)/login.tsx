@@ -1,23 +1,27 @@
+// Library imports
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, TextInputChangeEventData } from "react-native";
 import  { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as SecureStore from "expo-secure-store";
 
 // Firebase auth imports
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAuthContext } from "../(root)/context";
 
 
 type FormData = {
   email: string;
   password: string;
-}
+};
 
 
 const Login = () => {
-  const [currentUser, setCurrentUser] = useState(null);
   const [error, setError] = useState<string | null>(null);
+  const { currentUser, setCurrentUser } = useAuthContext();
   
+  // Watch login form state changes
   const { watch, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       email: '',
@@ -26,14 +30,40 @@ const Login = () => {
   });
   
   const onLogin: SubmitHandler<FormData> = async (data: FormData) => {
-      try {
+    try {
       const userLogin = await signInWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password)
       const user = userLogin.user;
+      const token = await user.getIdToken();
+
+      if (user) {
+        await storeUserCredentials(token, user.uid, user.displayName || '');
+        setCurrentUser(user.uid);
+      }
+
       console.log("user: ", user);
     } catch (error) {
       console.error("Error: ", error);
     }
     };
+    
+  const storeUserCredentials = async (token: string, uid: string, displayName: string) => {
+    try {
+      await SecureStore.setItemAsync("userToken", token, {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+      });
+  
+      await SecureStore.setItemAsync("userUid", uid, {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY
+      });
+  
+      await SecureStore.setItemAsync("userDisplayName", displayName, {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY
+      });
+    } catch (error) {
+      console.error("ERROR storing user credentials", error);
+      setError("Error storing user credentials");
+    }
+  };
 
   // Watch input field state changes
   // const emailWatch = watch("email");
