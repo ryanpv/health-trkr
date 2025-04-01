@@ -10,6 +10,7 @@ import 'react-native-reanimated';
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+import { AuthProvider } from './(root)/context';
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -45,10 +46,12 @@ export default function RootLayout() {
 
 
   return (
-    <Stack>
-      <Stack.Screen name='index' options={{ headerShown: false }}/> {/* Direct to welcome page */}
-      <Stack.Screen name='(auth)' options={{ headerShown: false }}/>
-      <Stack.Screen name='(root)' options={{ headerShown: false }}/>
-    </Stack>
+    <AuthProvider>
+      <Stack>
+        <Stack.Screen name='index' options={{ headerShown: false }}/> {/* Direct to welcome page */}
+        <Stack.Screen name='(auth)' options={{ headerShown: false }}/>
+        <Stack.Screen name='(root)' options={{ headerShown: false }}/>
+      </Stack>
+    </AuthProvider>
   );
 }
