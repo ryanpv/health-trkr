@@ -1,6 +1,6 @@
 // External libraries
 import { useEffect, useState } from "react";
-import { Image, Text, View, TouchableOpacity } from "react-native";
+import { Image, Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useRouter } from "expo-router";
@@ -23,6 +23,7 @@ const Profile = () => {
   const { currentUser } = useAuthContext();
   const [modalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,6 +32,8 @@ const Profile = () => {
 
   const logout = async () => {
     try {
+      setLoading(true);
+
       const userSignOut = await signOut(FIREBASE_AUTH);
       setModalVisible(false);
       console.log("User logged out: ", userSignOut);
@@ -39,11 +42,17 @@ const Profile = () => {
     } catch (error) {
       console.error("Error: ", error);
       setError("Error logging out. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <SafeAreaView className="bg-blue-400 h-screen p-5 flex items-center">
+      <SafeAreaView>
+        <ActivityIndicator style={ styles.loadingOverlay } size="large" color="#0000ff" animating={ loading } />
+      </SafeAreaView>
+
       <View className="flex max-w-xl w-full p-5">
         <View className="flex flex-row items-end gap-x-5">
           <View>
@@ -116,5 +125,22 @@ const Profile = () => {
     </SafeAreaView>
   )
 }
+
+
+const styles = StyleSheet.create({
+  loadingOverlay: {
+    opacity: 0.75,
+    backgroundColor: "#dbeafe", // bg-blue-100
+    display: "flex",
+    position: "absolute", 
+    zIndex: 10, 
+    justifyContent: "center",
+    alignItems: "center", 
+    top: 0,
+    left: 0, 
+    right: 0, 
+    bottom: 0,
+  },
+});
 
 export default Profile;

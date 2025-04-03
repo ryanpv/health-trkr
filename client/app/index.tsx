@@ -6,18 +6,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const Home = () => {
-  useEffect(() => {
-    
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      if (user) {
-        console.log("USER LOGGED IN: ", user);
-        const uid = user.uid;
-        // return <Redirect href="./(auth)/welcome" />
-      } else {
-        console.log("USER NOT LOGGED IN");
-      }
-    });
-  }, []);
 
   return (
     <SafeAreaView className="flex items-center">

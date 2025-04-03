@@ -1,9 +1,10 @@
 // Library imports
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, TextInputChangeEventData } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, TextInputChangeEventData, ActivityIndicator } from "react-native";
 import  { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as SecureStore from "expo-secure-store";
+import { useRouter } from "expo-router";
 
 // Firebase auth imports
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
@@ -18,9 +19,12 @@ type FormData = {
 
 
 const Login = () => {
+  // State variables
   const [error, setError] = useState<string | null>(null);
   const { currentUser, setCurrentUser } = useAuthContext();
-  
+  const [loading, setLoading] = useState(false);
+
+
   // Watch login form state changes
   const { watch, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     defaultValues: {
@@ -28,9 +32,12 @@ const Login = () => {
       password: ''
     }
   });
+
+  const router = useRouter();
   
   const onLogin: SubmitHandler<FormData> = async (data: FormData) => {
     try {
+      setLoading(true);
       const userLogin = await signInWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password)
       const user = userLogin.user;
       const token = await user.getIdToken();
@@ -38,13 +45,15 @@ const Login = () => {
       if (user) {
         await storeUserCredentials(token, user.uid, user.displayName || '');
         setCurrentUser(user.uid);
+        router.replace("/home");
       }
 
-      console.log("user: ", user);
     } catch (error) {
       console.error("Error: ", error);
+    } finally {
+      setLoading(false);
     }
-    };
+  };
     
   const storeUserCredentials = async (token: string, uid: string, displayName: string) => {
     try {
@@ -70,6 +79,10 @@ const Login = () => {
   // const passwordWatch = watch("password");
   return (
     <SafeAreaView className="bg-gray-300 h-full">
+      <SafeAreaView>
+        <ActivityIndicator style={ styles.loadingOverlay } size="large" color="#0000ff" animating={ loading } />
+      </SafeAreaView>
+
       <View>
         <View className="gap-y-5">
           <View>
@@ -145,7 +158,20 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 55,
     fontSize: 18
-  }
+  },
+  loadingOverlay: {
+    opacity: 0.75,
+    backgroundColor: "#dbeafe", // bg-blue-100
+    display: "flex",
+    position: "absolute", 
+    zIndex: 10, 
+    justifyContent: "center",
+    alignItems: "center", 
+    top: 0,
+    left: 0, 
+    right: 0, 
+    bottom: 0,
+  },
 });
 
 
