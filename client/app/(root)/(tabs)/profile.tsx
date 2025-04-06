@@ -4,6 +4,7 @@ import { Image, Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 
 // Firebase auth
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
@@ -16,6 +17,9 @@ import { useAuthContext } from "../context"; // Custom authentication context
 import RouteLink from "@/app/components/routeLink"; // Navigation link component
 import LogoutModal from "@/app/components/logoutModal"; // Logout confirmation modal
 
+// Utils
+import { getUserCredentials } from "@/app/utils/userStore"; // Function to retrieve user credentials
+
 // Constants
 import { icons } from "@/constants"; // Icon assets
 
@@ -27,8 +31,12 @@ const Profile = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("Current User in Profile: ", currentUser);
-  });
+    const userCreds = async () => {
+      const result = await getUserCredentials();
+      console.log("User UID from SecureStore: ", result);
+    }
+    userCreds();
+  }, []);
 
   const logout = async () => {
     try {

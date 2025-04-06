@@ -45,9 +45,9 @@ const Login = () => {
       if (user) {
         await storeUserCredentials(token, user.uid, user.displayName || '');
         setCurrentUser(user.uid);
+
         router.replace("/home");
       }
-
     } catch (error) {
       console.error("Error: ", error);
     } finally {
