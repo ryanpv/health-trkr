@@ -34,6 +34,13 @@ const Profile = () => {
     const userCreds = async () => {
       const result = await getUserCredentials();
       console.log("User UID from SecureStore: ", result);
+
+    //   const tokenTest = await fetch(`http://localhost:8000/token-test/${result?.accessToken}`);
+    //   if (!tokenTest.ok) {
+    //     throw new Error("Token test failed");
+    //   }
+    //   const tokenTestResponse = await tokenTest.json();
+    //   console.log("Token test response: ", tokenTestResponse);
     }
     userCreds();
   }, []);

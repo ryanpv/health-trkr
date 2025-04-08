@@ -1,5 +1,6 @@
 // Library imports
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Platform } from "react-native";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, TextInputChangeEventData, ActivityIndicator } from "react-native";
 import  { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,13 +18,13 @@ type FormData = {
   password: string;
 };
 
+const isBrowser = typeof window !== "undefined";
 
 const Login = () => {
   // State variables
   const [error, setError] = useState<string | null>(null);
   const { currentUser, setCurrentUser } = useAuthContext();
   const [loading, setLoading] = useState(false);
-
 
   // Watch login form state changes
   const { watch, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
@@ -54,20 +55,29 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const setCredentials = async (key: string, value: string): Promise<void> => {
+    try {
+      if (Platform.OS === "web") {
+        localStorage.setItem(key, value);
+      } else {
+        await SecureStore.setItemAsync(key, value, {
+          keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY
+        });
+      }
+    } catch (error) {
+      console.error(`Error setting ${key}: `, error);
+    }
+  };
     
   const storeUserCredentials = async (token: string, uid: string, displayName: string) => {
     try {
-      await SecureStore.setItemAsync("userToken", token, {
-        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-      });
-  
-      await SecureStore.setItemAsync("userUid", uid, {
-        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY
-      });
-  
-      await SecureStore.setItemAsync("userDisplayName", displayName, {
-        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY
-      });
+      // Store user credentials in localstorage during DEVELOPMENT
+      await Promise.all([
+        setCredentials("accessToken", token),
+        setCredentials("uid", uid),
+        setCredentials("displayName", displayName)
+      ]);
     } catch (error) {
       console.error("ERROR storing user credentials", error);
       setError("Error storing user credentials");
