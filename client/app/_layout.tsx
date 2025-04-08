@@ -25,7 +25,7 @@ export default function RootLayout() {
   useEffect(() => {
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       if (user) {
-        console.log("USER LOGGED IN: ", user);
+        console.log("USER LOGGED IN: ");
         const uid = user.uid;
       } else {
         console.log("USER NOT LOGGED IN");

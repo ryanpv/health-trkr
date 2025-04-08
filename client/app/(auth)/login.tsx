@@ -18,7 +18,6 @@ type FormData = {
   password: string;
 };
 
-const isBrowser = typeof window !== "undefined";
 
 const Login = () => {
   // State variables
@@ -39,10 +38,11 @@ const Login = () => {
   const onLogin: SubmitHandler<FormData> = async (data: FormData) => {
     try {
       setLoading(true);
-      const userLogin = await signInWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password)
+      const userLogin = await signInWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password);
       const user = userLogin.user;
+      
       const token = await user.getIdToken();
-
+      console.log("LOGIN TOKEN: ", token)
       if (user) {
         await storeUserCredentials(token, user.uid, user.displayName || '');
         setCurrentUser(user.uid);

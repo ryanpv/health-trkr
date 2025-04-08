@@ -18,10 +18,11 @@ import RouteLink from "@/app/components/routeLink"; // Navigation link component
 import LogoutModal from "@/app/components/logoutModal"; // Logout confirmation modal
 
 // Utils
-import { getUserCredentials } from "@/app/utils/userStore"; // Function to retrieve user credentials
+import { getUserCredentials } from "@/app/utils/getCredentials"; // Function to retrieve user credentials
 
 // Constants
 import { icons } from "@/constants"; // Icon assets
+import { deleteCredentials } from "@/app/utils/deleteCredentials";
 
 const Profile = () => {
   const { currentUser } = useAuthContext();
@@ -35,12 +36,12 @@ const Profile = () => {
       const result = await getUserCredentials();
       console.log("User UID from SecureStore: ", result);
 
-    //   const tokenTest = await fetch(`http://localhost:8000/token-test/${result?.accessToken}`);
-    //   if (!tokenTest.ok) {
-    //     throw new Error("Token test failed");
-    //   }
-    //   const tokenTestResponse = await tokenTest.json();
-    //   console.log("Token test response: ", tokenTestResponse);
+      const tokenTest = await fetch(`http://localhost:8000/token-test/${result?.accessToken}`);
+      if (!tokenTest.ok) {
+        throw new Error("Token test failed");
+      }
+      const tokenTestResponse = await tokenTest.json();
+      console.log("Token test response: ", tokenTestResponse);
     }
     userCreds();
   }, []);
@@ -48,8 +49,14 @@ const Profile = () => {
   const logout = async () => {
     try {
       setLoading(true);
-
       const userSignOut = await signOut(FIREBASE_AUTH);
+
+      await Promise.all([
+        deleteCredentials("accessToken"),
+        deleteCredentials("uid"),
+        deleteCredentials("displayName"),
+      ]);
+
       setModalVisible(false);
       console.log("User logged out: ", userSignOut);
 
