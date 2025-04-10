@@ -3,7 +3,7 @@ from typing import Optional
 from sqlmodel import Field, SQLModel
 
 class User(SQLModel, table=true):
-  id: Optional[int] = Field(default=None, primary_key=True)
+  id: int = Field(default=None, primary_key=True)
   displayName: str
   email: str
   total_points: int
