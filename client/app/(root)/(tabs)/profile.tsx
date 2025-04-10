@@ -43,6 +43,7 @@ const Profile = () => {
       const tokenTestResponse = await tokenTest.json();
       console.log("Token test response: ", tokenTestResponse);
     }
+    console.log("fetching user creds")
     userCreds();
   }, []);
 
