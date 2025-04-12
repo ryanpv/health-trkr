@@ -1,6 +1,8 @@
+from datetime import datetime
 from typing import Optional
 
-from sqlmodel import Field, SQLModel
+from sqlalchemy import DateTime, text
+from sqlmodel import Column, Field, SQLModel
 
 
 class Quest(SQLModel, table=True):

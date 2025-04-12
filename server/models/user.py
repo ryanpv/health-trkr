@@ -1,8 +1,11 @@
+from datetime import datetime
 from typing import Optional
 
+from sqlalchemy import Column, DateTime, text
 from sqlmodel import Field, SQLModel
 
-class User(SQLModel, table=true):
+
+class User(SQLModel, table=True):
   id: int = Field(default=None, primary_key=True)
   displayName: str
   email: str
