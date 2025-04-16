@@ -11,17 +11,18 @@ class BaseConfig(BaseSettings):
                                     
 
 class GlobalConfig(BaseConfig):
-  FIREBASE_TYPE: Optional[str] = None
-  FIREBASE_PROJECT_ID: Optional[str] = None
-  FIREBASE_PRIVATE_KEY_ID: Optional[str] = None
-  FIREBASE_PRIVATE_KEY: Optional[str] = None
-  FIREBASE_CLIENT_EMAIL: Optional[str] = None
-  FIREBASE_CLIENT_ID: Optional[str] = None
-  FIREBASE_AUTH_URI: Optional[str] = None
-  FIREBASE_TOKEN_URI: Optional[str] = None
-  FIREBASE_AUTH_PROVIDER_X509_CERT_URL: Optional[str] = None
-  FIREBASE_CLIENT_X509_CERT_URL: Optional[str] = None
-  FIREBASE_UNIVERSE_DOMAIN: Optional[str] = None
+    FIREBASE_TYPE: Optional[str] = None
+    FIREBASE_PROJECT_ID: Optional[str] = None
+    FIREBASE_PRIVATE_KEY_ID: Optional[str] = None
+    FIREBASE_PRIVATE_KEY: Optional[str] = None
+    FIREBASE_CLIENT_EMAIL: Optional[str] = None
+    FIREBASE_CLIENT_ID: Optional[str] = None
+    FIREBASE_AUTH_URI: Optional[str] = None
+    FIREBASE_TOKEN_URI: Optional[str] = None
+    FIREBASE_AUTH_PROVIDER_X509_CERT_URL: Optional[str] = None
+    FIREBASE_CLIENT_X509_CERT_URL: Optional[str] = None
+    FIREBASE_UNIVERSE_DOMAIN: Optional[str] = None
+    DB_URL: Optional[str] = None
 
 
 class DevConfig(GlobalConfig):

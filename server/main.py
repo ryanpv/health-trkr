@@ -2,10 +2,13 @@ import logging
 
 import firebase_admin
 from config import config
+from database import engine, test_connection
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import app_check, auth, credentials
+from models.user import User
+from sqlalchemy import Select
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +48,20 @@ firebase_credentials = {
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate(firebase_credentials)
 firebase_admin.initialize_app(cred)
+
+# Database events
+@app.on_event("startup")
+async def on_startup():
+    try:
+        await test_connection()
+        print("Database connection successful")
+    except Exception as e:
+        print(f"Error connecting to the database: {e}")
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    await engine.dispose()
 
 
 @app.get("/")
