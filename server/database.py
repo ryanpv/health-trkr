@@ -17,6 +17,9 @@ async_session = sessionmaker(
 )
 
 async def test_connection():
-  async with engine.connect() as conn:
-    result = await conn.execute(text("SELECT NOW();"))
-    print("Connection successful:", result.scalar())
+    async with engine.connect() as conn:
+        try:
+            result = await conn.execute(text("SELECT NOW();"))
+            print("Connection successful:", result.scalar())
+        except Exception as e:
+            print("Connection failed:", e)

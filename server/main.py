@@ -7,8 +7,6 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import app_check, auth, credentials
-from models.user import User
-from sqlalchemy import Select
 
 logger = logging.getLogger(__name__)
 
@@ -78,3 +76,7 @@ async def token_test(token: str):
         print(f"PRINT TOKEN ERROR: {e}")
         logger.error(f"Error verifying token: {e}")
         return {"error": str(e)}
+
+
+# Routers
+app.include(quest_router)
