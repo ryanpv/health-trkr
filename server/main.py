@@ -8,6 +8,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import app_check, auth, credentials
 
+# Route Imports
+from routers.quest import router as quest_router
+
 logger = logging.getLogger(__name__)
 
 load_dotenv()
