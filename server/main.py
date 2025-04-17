@@ -25,9 +25,9 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    # allow_credentials=True,
-    # allow_methods=["*"],
-    # allow_headers=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Firebase admin credentials
@@ -82,4 +82,4 @@ async def token_test(token: str):
 
 
 # Routers
-app.include(quest_router)
+app.include_router(quest_router)

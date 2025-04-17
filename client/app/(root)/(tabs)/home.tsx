@@ -10,6 +10,27 @@ const Home = () => {
   const [dailyGoalCount, setDailyGoalCount] = useState<number>(2);
   const [pressed, setPressed] = useState<boolean>(false);
 
+  const handleOnPress = async() => {
+    console.log("BUTTON PRESSED")
+    const result = await fetch("http://localhost:8000/quest", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        title: "30 min workout",
+        quest_type: "daily",
+        date: new Date().toISOString(),
+        user_id: 8,
+        quest_status: "incomplete"
+      })
+    });
+
+    const data = await result.json();
+    console.log("RETURNED DATA: ", data);
+  }
+
   return (
     <SafeAreaView className="bg-blue-400 min-h-screen flex items-center p-5">
       <View className="flex max-w-xl w-full p-5">
@@ -36,7 +57,7 @@ const Home = () => {
 
         <TouchableOpacity 
           className="my-5"
-          onPress={ () => {} }
+          onPress={ handleOnPress }
         >
           <View 
             className="p-2 shadow-lg rounded-md flex flex-row items-center justify-center space-x-2 bg-blue-500"
