@@ -17,13 +17,13 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ logout }) => {
           animationType="slide"
           transparent={ true }
         >
-          <View className="bg-blue-500 flex items-center justify-center m-auto p-5 rounded-md max-w-xs w-full shadow shadow-xl">
+          <View className="bg-blue-500 flex items-center justify-center m-auto p-5 rounded-md max-w-xs w-full shadow-xl">
             <Text className="font-semibold text-xl text-white">Log out?</Text>
             <View className="flex flex-row gap-x-5 justify-center my-5">
               <TouchableOpacity
                 onPress={ logout }
               >
-                <View className="flex-1 rounded-md bg-red-400 p-2 items-center justify-center shadow shadow-xl w-24">
+                <View className="flex-1 rounded-md bg-red-400 p-2 items-center justify-center shadow-xl w-24">
                   <Text className="text-white font-semibold text-lg">Yes</Text>
                 </View>
               </TouchableOpacity>
