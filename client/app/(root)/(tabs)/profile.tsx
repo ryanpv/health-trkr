@@ -44,7 +44,7 @@ const Profile = () => {
       console.log("Token test response: ", tokenTestResponse);
     }
     console.log("fetching user creds")
-    userCreds();
+    // userCreds();
   }, []);
 
   const logout = async () => {
@@ -105,7 +105,7 @@ const Profile = () => {
           </View>
         </View>
 
-        <View className="bg-blue-200 p-5 rounded-md space-y-5 shadow shadow-xl">
+        <View className="bg-blue-200 p-5 rounded-md space-y-5 shadow-xl">
           <Text className="font-semibold text-lg">Account</Text>
           <RouteLink 
             routeName="Personal Data" 
@@ -124,7 +124,7 @@ const Profile = () => {
           />
         </View>
 
-        <View className="bg-blue-200 p-5 rounded-md space-y-5 mt-5 shadow shadow-xl">
+        <View className="bg-blue-200 p-5 rounded-md space-y-5 mt-5 shadow-xl">
           <Text className="font-semibold text-lg">Other</Text>
           <RouteLink 
             routeName="Contact Us" 
