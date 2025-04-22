@@ -33,6 +33,7 @@ const AddQuestModal: React.FC<AddQuestModalType> = ({ addQuest }) => {
           transparent={ true }
         >
           <View className="flex items-center bg-blue-200 w-full shadow-xl h-screen">
+            {/* FORM HEADER  */}
             <View className="p-5 flex flex-row w-screen space-x-5 justify-between">
               <Text className="font-semibold text-xl">Add New Quest</Text>
               <View className="">
@@ -44,7 +45,8 @@ const AddQuestModal: React.FC<AddQuestModalType> = ({ addQuest }) => {
               </TouchableOpacity>
               </View>
             </View>
-            
+
+            {/* FORM INPUT */}
             <View className="w-screen">
               <Controller
                 name="questTitle"
@@ -61,6 +63,10 @@ const AddQuestModal: React.FC<AddQuestModalType> = ({ addQuest }) => {
               />
             </View>
 
+            {/* FORM SUBMIT BUTTON */}
+            <TouchableOpacity className="bg-blue-500 p-3 px-5 my-5 rounded" onPress={ handleSubmit(addQuest) }>
+              <Text className="text-white text-center text-lg">Save</Text>
+            </TouchableOpacity>
           </View>
         </Modal>
       </View>
