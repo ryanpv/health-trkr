@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { icons } from '@/constants';
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
+import Icon from "react-native-vector-icons/FontAwesome";
+
 
 type AddQuestModalType = {
   addQuest: () => void
@@ -30,16 +32,27 @@ const AddQuestModal: React.FC<AddQuestModalType> = ({ addQuest }) => {
           animationType="fade"
           transparent={ true }
         >
-          <View className="flex items-center justify-center mx-auto bg-blue-200 w-full shadow-xl rounded-b-lg">
-            <Text>Add a new quest</Text>
+          <View className="flex items-center bg-blue-200 w-full shadow-xl h-screen">
+            <View className="p-5 flex flex-row w-screen space-x-5 justify-between">
+              <Text className="font-semibold text-xl">Add New Quest</Text>
+              <View className="">
 
-            <View>
+              <TouchableOpacity
+                onPress={ () => setModalVisible(false) }
+                >
+                <Icon name="close" size={ 20 } color={ "red" } />
+              </TouchableOpacity>
+              </View>
+            </View>
+            
+            <View className="w-screen">
               <Controller
                 name="questTitle"
                 control={ control }
                 render={({ field: { onChange, value }}) => (
                   <TextInput 
-                    placeholder="Quest title"
+                    placeholder="Enter quest title"
+                    placeholderTextColor={"gray"}
                     onChange={ onChange}
                     value={ value }
                     style={ styles.input }
@@ -48,17 +61,6 @@ const AddQuestModal: React.FC<AddQuestModalType> = ({ addQuest }) => {
               />
             </View>
 
-
-
-            <View className="p-5">
-              <TouchableOpacity
-                onPress={ () => setModalVisible(false) }
-              >
-                <View>
-                  <Text>Close</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
           </View>
         </Modal>
       </View>

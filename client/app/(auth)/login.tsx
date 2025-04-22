@@ -88,7 +88,7 @@ const Login = () => {
   // const emailWatch = watch("email");
   // const passwordWatch = watch("password");
   return (
-    <SafeAreaView className="bg-gray-300 h-full">
+    <SafeAreaView className="bg-gray-300 h-screen">
       <SafeAreaView>
         <ActivityIndicator style={ styles.loadingOverlay } size="large" color="#0000ff" animating={ loading } />
       </SafeAreaView>
