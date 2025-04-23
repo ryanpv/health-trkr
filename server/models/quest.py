@@ -8,7 +8,6 @@ from sqlmodel import Column, Field, SQLModel
 class QuestBase(SQLModel):
     title: str
     quest_type: str
-    user_id: int = Field(foreign_key="user.id")
     quest_status: str = Field(default="incomplete")
 
 
@@ -17,7 +16,13 @@ class Quest(QuestBase, table=True):
     date: datetime = Field(
         sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
     )
+    user_id: int = Field(foreign_key="user.id")
 
 
 class QuestCreate(QuestBase):
     pass
+
+
+class QuestCreateResponse(SQLModel):
+    id: int
+    message: str = "Successfully created quest"
