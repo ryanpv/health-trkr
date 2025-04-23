@@ -6,23 +6,46 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 
-type AddQuestModalType = {
-  addQuest: () => void
-};
-
 type QuestFormData = {
   questTitle: string;
+  quest_type: string;
 }
 
 
-const AddQuestModal: React.FC<AddQuestModalType> = ({ addQuest }) => {
+const AddQuestModal: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
-
+  const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const { control, handleSubmit } = useForm<QuestFormData>({
     defaultValues: {
-      questTitle: ''
+      questTitle: '',
+      quest_type: '',
     }
-  })
+  });
+
+  const submitQuest = async (data: QuestFormData) => {
+    try {
+      const result = await fetch(`${ serverUrl }/quest`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          title: data.questTitle,
+          quest_type: 'daily',
+        })
+      });
+
+      const response = await result.json();
+
+      if (response.ok) {
+        console.log("RETURNED DATA: ", response);
+      }
+
+    } catch (error: unknown) {
+      console.log("Error: ", error);
+    }
+  };
 
   return (
     <View>
@@ -64,7 +87,7 @@ const AddQuestModal: React.FC<AddQuestModalType> = ({ addQuest }) => {
             </View>
 
             {/* FORM SUBMIT BUTTON */}
-            <TouchableOpacity className="bg-blue-500 p-3 px-5 my-5 rounded" onPress={ handleSubmit(addQuest) }>
+            <TouchableOpacity className="bg-blue-500 p-3 px-5 my-5 rounded" onPress={ handleSubmit(submitQuest) }>
               <Text className="text-white text-center text-lg">Save</Text>
             </TouchableOpacity>
           </View>

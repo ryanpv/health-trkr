@@ -10,33 +10,6 @@ import AddQuestModal from "@/app/(quests)/create";
 const Home = () => {
   const [dailyGoalCount, setDailyGoalCount] = useState<number>(2);
   const [pressed, setPressed] = useState<boolean>(false);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-
-  const handleOnPress = async() => {
-    try {
-      console.log("ADD BUTTON PRESSED")
-      // const result = await fetch("http://localhost:8000/quest", {
-      //   method: "POST",
-      //   credentials: "include",
-      //   headers: {
-      //     "Content-type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     title: "30 min workout",
-      //     quest_type: "daily",
-      //     // date: new Date().toISOString(),
-      //     user_id: 8,
-      //     quest_status: "incomplete"
-      //   })
-      // });
-  
-      // const data = await result.json();
-      // console.log("RETURNED DATA: ", data);
-    } catch (error) {
-      console.log("Error: ", error);
-
-    }
-  }
 
   return (
     <SafeAreaView className="bg-blue-400 min-h-screen flex items-center p-5">
@@ -62,7 +35,7 @@ const Home = () => {
         
         <QuestButton />
 
-        <AddQuestModal addQuest={ handleOnPress }/>
+        <AddQuestModal />
       </View>
     </SafeAreaView>
   )
