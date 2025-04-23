@@ -22,24 +22,24 @@ const AddQuestModal: React.FC = () => {
     }
   });
 
-  const submitQuest = async (data: QuestFormData) => {
+  const submitQuest = async (formData: QuestFormData) => {
     try {
-      const result = await fetch(`${ serverUrl }/quest`, {
+      const response = await fetch(`${ serverUrl }/quest`, {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-type": "application/json"
         },
         body: JSON.stringify({
-          title: data.questTitle,
+          title: formData.questTitle,
           quest_type: 'daily',
         })
       });
 
-      const response = await result.json();
+      const data = await response.json();
 
       if (response.ok) {
-        console.log("RETURNED DATA: ", response);
+        console.log("RETURNED DATA: ", data);
       }
 
     } catch (error: unknown) {
