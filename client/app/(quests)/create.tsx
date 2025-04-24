@@ -4,6 +4,7 @@ import { icons } from '@/constants';
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
 import Icon from "react-native-vector-icons/FontAwesome";
+import { getUserCredentials } from "@/app/utils/getCredentials";
 
 
 type QuestFormData = {
@@ -21,13 +22,23 @@ const AddQuestModal: React.FC = () => {
       quest_type: '',
     }
   });
-
+  
   const submitQuest = async (formData: QuestFormData) => {
     try {
+      const credentials = await getUserCredentials();
+
+      if (!credentials) {
+        console.log("User is not authenticated");
+        return;
+      }
+
+      const { accessToken, uid, displayName } = credentials;
+console.log("accessToken: ", accessToken);
       const response = await fetch(`${ serverUrl }/quest`, {
         method: "POST",
         credentials: "include",
         headers: {
+          "Authorization": `Bearer ${ accessToken }`,
           "Content-type": "application/json"
         },
         body: JSON.stringify({

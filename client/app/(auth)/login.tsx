@@ -58,6 +58,7 @@ const Login = () => {
 
   const setCredentials = async (key: string, value: string): Promise<void> => {
     try {
+      // Store user credentials in localstorage during DEVELOPMENT
       if (Platform.OS === "web") {
         localStorage.setItem(key, value);
       } else {
@@ -72,7 +73,6 @@ const Login = () => {
     
   const storeUserCredentials = async (token: string, uid: string, displayName: string) => {
     try {
-      // Store user credentials in localstorage during DEVELOPMENT
       await Promise.all([
         setCredentials("accessToken", token),
         setCredentials("uid", uid),
