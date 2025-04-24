@@ -16,7 +16,7 @@ class Quest(QuestBase, table=True):
     date: datetime = Field(
         sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
     )
-    user_id: int = Field(foreign_key="user.id")
+    user_id: int = Field(foreign_key="users.id")
 
 
 class QuestCreate(QuestBase):
