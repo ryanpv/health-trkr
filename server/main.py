@@ -2,7 +2,7 @@ import logging
 
 import firebase_admin
 from config import config
-from database import engine, test_connection
+from database import engine, init_db, test_connection
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -54,7 +54,9 @@ firebase_admin.initialize_app(cred)
 @app.on_event("startup")
 async def on_startup():
     try:
-        await test_connection()
+        print("initializing DB")
+        # await test_connection()
+        await init_db()
         print("Database connection successful")
     except Exception as e:
         print(f"Error connecting to the database: {e}")
