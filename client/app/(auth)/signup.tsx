@@ -12,7 +12,6 @@ type FormData = {
   confirmPassword: string;
 }
 
-
 const Signup = () => {
   const { watch, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     defaultValues: {
@@ -24,9 +23,33 @@ const Signup = () => {
   });
 
   const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
-    console.log("data: ", data);
-    const createUser = await createUserWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password);
-    console.log("createUser: ", createUser.user);
+    try {
+      console.log("data: ", data);
+      const createUser = await createUserWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password);
+      console.log("createUser: ", createUser.user);
+      const user = createUser.user;
+
+      if (user) {
+        const token = await user.getIdToken();
+        const addUserToDatabase = await fetch(`${ process.env.EXPO_PUBLIC_DEV_SERVER }/user`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Authorization": `Bearer ${ token }`,
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            displayName: data.name,
+            email: data.email,
+            firebase_uid: user.uid
+          })
+        })
+
+        console.log("addUserToDatabase: ", addUserToDatabase);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   const password = watch("password");
