@@ -10,6 +10,7 @@ from firebase_admin import app_check, auth, credentials
 
 # Route Imports
 from routers.quest import router as quest_router
+from routers.user import router as user_router
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +77,7 @@ async def root():
 async def token_test(token: str):
     try:
         decoded_token = auth.verify_id_token(token)
+        print("Decoded token:", decoded_token)
         return decoded_token["uid"]
     except Exception as e:
         print(f"PRINT TOKEN ERROR: {e}")
@@ -85,3 +87,4 @@ async def token_test(token: str):
 
 # Routers
 app.include_router(quest_router)
+app.include_router(user_router)
