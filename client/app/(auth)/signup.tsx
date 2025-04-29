@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, NativeSyntheticEve
 import { useState } from "react";
 import  { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 
 type FormData = {
   name: string;
@@ -28,8 +28,13 @@ const Signup = () => {
       const createUser = await createUserWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password);
       console.log("createUser: ", createUser.user);
       const user = createUser.user;
+      
 
       if (user) {
+        await sendEmailVerification(user, {
+          url: `http://localhost:8081/home`,
+        });
+        
         const token = await user.getIdToken();
         const addUserToDatabase = await fetch(`${ process.env.EXPO_PUBLIC_DEV_SERVER }/user`, {
           method: "POST",
