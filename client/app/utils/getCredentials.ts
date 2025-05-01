@@ -20,13 +20,12 @@ const getCredentials = async (key: string): Promise<string | null> => {
 // Retrieve multiple credentials
 export const getUserCredentials = async () => {
   try {
-    const [accessToken, uid, displayName] = await Promise.all([
-      getCredentials("accessToken"),
+    const [uid, displayName] = await Promise.all([
       getCredentials("uid"),
       getCredentials("displayName")
     ]);
 
-    return { accessToken, uid, displayName };
+    return { uid, displayName };
   } catch (error) {
     console.error("Error retrieving user credentials: ", error);
     return null;

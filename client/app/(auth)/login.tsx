@@ -40,11 +40,20 @@ const Login = () => {
       setLoading(true);
       const userLogin = await signInWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password);
       const user = userLogin.user;
-      
       const token = await user.getIdToken();
-      console.log("LOGIN TOKEN: ", token)
+      console.log("fb auth", FIREBASE_AUTH.currentUser)
+      
       if (user) {
-        await storeUserCredentials(token, user.uid, user.displayName || '');
+        const response = await fetch('http://localhost:8000/user', {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${ token }`,
+            "Content-type": 'application/json'
+          }
+        });
+        const userId = await response.json();
+
+        await storeUserCredentials(user.uid, user.displayName || '');
         setCurrentUser(user.uid);
 
         router.replace("/home");
@@ -71,10 +80,9 @@ const Login = () => {
     }
   };
     
-  const storeUserCredentials = async (token: string, uid: string, displayName: string) => {
+  const storeUserCredentials = async (uid: string, displayName: string) => {
     try {
       await Promise.all([
-        setCredentials("accessToken", token),
         setCredentials("uid", uid),
         setCredentials("displayName", displayName)
       ]);

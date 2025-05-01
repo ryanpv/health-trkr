@@ -1,6 +1,6 @@
 // External libraries
 import { useEffect, useState } from "react";
-import { Image, Text, View, StyleSheet, ActivityIndicator } from "react-native";
+import { Image, Text, View, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useRouter } from "expo-router";
@@ -33,10 +33,14 @@ const Profile = () => {
 
   useEffect(() => {
     const userCreds = async () => {
-      const result = await getUserCredentials();
-      console.log("User UID from SecureStore: ", result);
+      const credentials = FIREBASE_AUTH.currentUser;
+      if (!credentials) {
+        console.log("User is not authenticated");
+        return;
+      };
+      const accessToken = credentials?.getIdToken();
 
-      const tokenTest = await fetch(`http://localhost:8000/token-test/${result?.accessToken}`);
+      const tokenTest = await fetch(`http://localhost:8000/token-test/${ accessToken }`);
       if (!tokenTest.ok) {
         throw new Error("Token test failed");
       }
@@ -44,7 +48,7 @@ const Profile = () => {
       console.log("Token test response: ", tokenTestResponse);
     }
     console.log("fetching user creds")
-    // userCreds();
+    userCreds();
   }, []);
 
   const logout = async () => {
@@ -53,7 +57,6 @@ const Profile = () => {
       const userSignOut = await signOut(FIREBASE_AUTH);
 
       await Promise.all([
-        deleteCredentials("accessToken"),
         deleteCredentials("uid"),
         deleteCredentials("displayName"),
       ]);
@@ -71,7 +74,7 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView className="bg-blue-400 h-screen p-5 flex items-center">
+    <ScrollView className="bg-blue-400 h-screen p-5 flex items-center">
       <SafeAreaView>
         <ActivityIndicator style={ styles.loadingOverlay } size="large" color="#0000ff" animating={ loading } />
       </SafeAreaView>
@@ -145,7 +148,7 @@ const Profile = () => {
         </View>
 
       </View>
-    </SafeAreaView>
+    </ScrollView>
   )
 }
 
