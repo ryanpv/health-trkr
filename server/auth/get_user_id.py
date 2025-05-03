@@ -1,18 +1,10 @@
-import cachetools
 from auth.verify_token_basic import verify_token_basic
-from cachetools import TTLCache
-from cachetools.keys import hashkey
-from database import get_session
+from database import get_session, async_session
 from fastapi import Depends, HTTPException
 from models.user import User
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
-uid_cache = TTLCache(maxsize=100, ttl=3600)
-
-
-def uid_key(_, session, firebase_uid):
-    return hashkey(firebase_uid)
+from async_lru import alru_cache
 
 
 async def fetch_user_id(
@@ -29,6 +21,7 @@ async def fetch_user_id(
     return user.id
 
 
-@cachetools.cached(cache=uid_cache, key=uid_key)
-async def get_cached_uid(session, firebase_uid):
-    return await fetch_user_id(session=session, firebase_uid=firebase_uid)
+@alru_cache(maxsize=100)
+async def get_cached_uid(firebase_uid: str):
+    async with async_session() as session:
+        return await fetch_user_id(session=session, firebase_uid=firebase_uid)
