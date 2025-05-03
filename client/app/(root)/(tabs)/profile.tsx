@@ -38,7 +38,7 @@ const Profile = () => {
         console.log("User is not authenticated");
         return;
       };
-      const accessToken = credentials?.getIdToken();
+      const accessToken = await credentials.getIdToken();
 
       const tokenTest = await fetch(`http://localhost:8000/token-test/${ accessToken }`);
       if (!tokenTest.ok) {

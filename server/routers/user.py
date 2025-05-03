@@ -8,6 +8,22 @@ from sqlalchemy.ext.asyncio import AsyncSession
 router = APIRouter()
 
 
+@router.get("/user", status_code=200)
+async def get_user(
+    uid=Depends(verify_token_basic), session: AsyncSession = Depends(get_session)
+) -> int:
+    try:
+        result = await session.execute(select(User).where(User.firebase_uid == uid))
+        user = result.scalar_one_or_none()
+
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found.")
+
+        return user.id
+    except Exception as e:
+        print(f"Unable to retrieve user: {e}")
+
+
 @router.post("/user", status_code=201)
 async def create_user(
     user_data: UserCreate,

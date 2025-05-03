@@ -1,6 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Text, View, Image, TouchableOpacity } from "react-native"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { icons } from '@/constants';
 
 import QuestButton from "@/app/components/questButton";
@@ -9,7 +9,13 @@ import AddQuestModal from "@/app/(quests)/create";
 
 const Home = () => {
   const [dailyGoalCount, setDailyGoalCount] = useState<number>(2);
-  const [pressed, setPressed] = useState<boolean>(false);
+  const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
+
+  useEffect(() => {
+    const fetchQuests = async() => {
+      const result = await fetch(`${ serverUrl }/quests`)
+    } 
+  }, []);
 
   return (
     <SafeAreaView className="bg-blue-400 min-h-screen flex items-center p-5">

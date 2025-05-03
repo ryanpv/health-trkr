@@ -4,6 +4,7 @@ from firebase_admin.exceptions import FirebaseError
 
 
 async def verify_token_and_email(authorization: str = Header(...)):
+    print(f"Token: {authorization}")
     if not authorization.startswith("Bearer "):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

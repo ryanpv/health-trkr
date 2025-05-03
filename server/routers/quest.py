@@ -1,7 +1,7 @@
 from auth.verify_token_and_email import verify_token_and_email
 from database import get_session
 from fastapi import APIRouter, Depends, HTTPException
-from models.quest import Quest, QuestCreate, QuestCreateResponse
+from models.quest import Quest, QuestCreate, QuestCreateResponse, QuestResponse
 from models.user import User
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,6 +9,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from auth.get_user_id import get_cached_uid
 
 router = APIRouter()
+
+
+# GET QUEST
+@router.get("/quest", response_model=QuestResponse, status_code=200)
+async def get_quests()
 
 
 # CREATE QUEST

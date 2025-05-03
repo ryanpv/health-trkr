@@ -5,6 +5,7 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
 import Icon from "react-native-vector-icons/FontAwesome";
 import { getUserCredentials } from "@/app/utils/getCredentials";
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
 
 
 type QuestFormData = {
@@ -25,15 +26,15 @@ const AddQuestModal: React.FC = () => {
   
   const submitQuest = async (formData: QuestFormData) => {
     try {
-      const credentials = await getUserCredentials();
+      const credentials = FIREBASE_AUTH.currentUser
 
       if (!credentials) {
         console.log("User is not authenticated");
         return;
       }
 
-      const { accessToken, uid, displayName } = credentials;
-console.log("accessToken: ", accessToken);
+      const accessToken = await credentials.getIdToken();
+
       const response = await fetch(`${ serverUrl }/quest`, {
         method: "POST",
         credentials: "include",
@@ -47,9 +48,9 @@ console.log("accessToken: ", accessToken);
         })
       });
 
-      const data = await response.json();
-
+      
       if (response.ok) {
+        const data = await response.json();
         console.log("RETURNED DATA: ", data);
       }
 

@@ -26,3 +26,13 @@ class QuestCreate(QuestBase):
 class QuestCreateResponse(SQLModel):
     id: int
     message: str = "Successfully created quest"
+
+
+class QuestResponse(SQLModel):
+    id: int
+    title: str
+    quest_type: str
+    quest_status: str
+    date: datetime = Field(
+        sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+    )
