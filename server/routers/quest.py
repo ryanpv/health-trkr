@@ -1,4 +1,5 @@
 from auth.verify_token_and_email import verify_token_and_email
+from auth.verify_token_basic import verify_token_basic
 from database import get_session
 from fastapi import APIRouter, Depends, HTTPException
 from models.quest import Quest, QuestCreate, QuestCreateResponse, QuestResponse
@@ -12,12 +13,28 @@ router = APIRouter()
 
 
 # GET QUEST
-@router.get("/quest", response_model=QuestResponse, status_code=200)
-async def get_quests()
+@router.get("/quests", response_model=list[QuestResponse], status_code=200)
+async def get_quests(
+    session: AsyncSession = Depends(get_session), uid: str = Depends(verify_token_basic)
+):
+    try:
+        user_id = await get_cached_uid(firebase_uid=uid)
+
+        result = await session.execute(
+            select(Quest).where(Quest.user_id == user_id).order_by(Quest.date.desc())
+        )
+        quests = result.scalars().all()
+        print(f"quests: {quests}")
+        return quests
+    except Exception as e:
+        print(f"Error fetching quests: {e}")
+        raise HTTPException(
+            status_code=500, detail="Unable to fetch quests at this time."
+        )
 
 
 # CREATE QUEST
-@router.post("/quest", response_model=QuestCreateResponse, status_code=201)
+@router.post("/quests", response_model=QuestCreateResponse, status_code=201)
 async def create_quest(
     quest_data: QuestCreate,
     session: AsyncSession = Depends(get_session),
