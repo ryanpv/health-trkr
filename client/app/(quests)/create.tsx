@@ -35,17 +35,17 @@ const AddQuestModal: React.FC = () => {
 
       const accessToken = await credentials.getIdToken();
 
-      const response = await fetch(`${ serverUrl }/quest`, {
+      const response = await fetch(`${ serverUrl }/quests`, {
         method: "POST",
         credentials: "include",
         headers: {
           "Authorization": `Bearer ${ accessToken }`,
-          "Content-type": "application/json"
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           title: formData.questTitle,
-          quest_type: 'daily',
-        })
+          quest_type: "daily",
+        }),
       });
 
       
