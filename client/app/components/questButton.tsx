@@ -1,8 +1,16 @@
 import { View, Image, TouchableOpacity, Text } from "react-native";
 
 import { icons } from '@/constants';
+import React from "react";
 
-const QuestButton = () => { // Params: questName, icon/questType?
+
+interface QuestButtonProps {
+  title: string;
+  quest_type: string;
+  quest_status: string;
+};
+
+const QuestButton: React.FC<QuestButtonProps> = ({ title, quest_type, quest_status }) => { // Params: questName, icon/questType?
 
   return (
     <TouchableOpacity 
@@ -22,13 +30,13 @@ const QuestButton = () => { // Params: questName, icon/questType?
         </View>
 
         <View className="items-center text-center">
-          <Text className="text-white font-semibold m-auto">Quest 1</Text>
+          <Text className="text-white font-semibold m-auto">{ title }</Text>
         </View>
 
         <View className="">
           <Image 
             className=""
-            source={ icons.home }
+            source={ icons.check }
             style={ { width: 30, height: 30 } } 
             resizeMode="contain"
             />
