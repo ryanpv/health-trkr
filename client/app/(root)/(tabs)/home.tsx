@@ -5,16 +5,38 @@ import { icons } from '@/constants';
 
 import QuestButton from "@/app/components/questButton";
 import AddQuestModal from "@/app/(quests)/create";
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { fetchQuests } from "@/app/utils/api";
+import { getUserAccessToken } from "@/app/utils/getAccessToken";
+import { useStateContext } from "@/app/contexts/stateContext";
+
+import { Quest } from "@/app/types/quest.types";
 
 
 const Home = () => {
-  const [dailyGoalCount, setDailyGoalCount] = useState<number>(2);
+  const [dailyGoalCount,setDailyGoalCount] = useState<number>(2);
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
-
+  const [loading, setLoading] = useState(false);
+  const { questList, setQuestList } = useStateContext();
+  const credentials = FIREBASE_AUTH.currentUser;
+  
+  
   useEffect(() => {
-    const fetchQuests = async() => {
-      const result = await fetch(`${ serverUrl }/quests`)
-    } 
+    setLoading(true);
+    const getQuests = async () => {
+      try {
+        const accessToken = await getUserAccessToken();
+        const fetchQuestList = await fetchQuests(accessToken);
+        setQuestList(fetchQuestList);
+        console.log("getQuests: ", fetchQuestList)
+      } catch (error) {
+        console.log("Error fetching quests: ", error)
+      }
+    };
+
+    getQuests();
+
+    setLoading(false);
   }, []);
 
   return (
@@ -22,29 +44,51 @@ const Home = () => {
       <View className="flex max-w-xl w-full p-5">
         <View className="my-5 flex flex-row">
           <View className="flex-1 gap-y-2">
-            <Text className="font-semibold text-white">Welcome back, </Text>
-            <Text className="font-semibold text-lg text-white">User One</Text>
+            <Text className="font-semibold text-white">
+              Welcome back,{" "}
+            </Text>
+            <Text className="font-semibold text-lg text-white">
+              User One
+            </Text>
           </View>
 
           <View className="">
-            <Image 
-              source={ icons.home }
-              style={ { width: 30, height: 30 } } 
+            <Image
+              source={icons.home}
+              style={{
+                width: 30,
+                height: 30,
+              }}
               resizeMode="contain"
             />
           </View>
         </View>
 
         <View className="my-5 p-5 h-40 rounded-md shadow-lg bg-blue-200">
-          <Text className="font-semibold">{ dailyGoalCount } / 5 Daily goals completed</Text>
+          <Text className="font-semibold">
+            {dailyGoalCount} / 5 Daily
+            goals completed
+          </Text>
         </View>
-        
-        <QuestButton />
+
+        <View className="gap-y-5">
+          { !loading && questList.length > 0 ?
+            questList.map((quest) => (
+              <QuestButton 
+                title={ quest.title } 
+                quest_type={ quest.quest_type } 
+                quest_status={ quest.quest_status }
+              />
+            ))
+            : null
+          }
+        </View>
+
 
         <AddQuestModal />
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 export default Home;
