@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, Dispatch, SetStateAction } 
 
 type Quest = {
   date: string,
-  id: number,
+  id: number | null,
   quest_status: string,
   quest_type: string,
   title: string
@@ -20,7 +20,7 @@ export const StateContext = createContext<ContextType | null>(null);
 export const StateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [questList, setQuestList] = useState<Quest[]>([{
       date: "",
-      id: 0,
+      id: null,
       quest_status: "incomplete",
       quest_type: "",
       title: ""

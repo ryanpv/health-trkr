@@ -1,4 +1,4 @@
-export const fetchQuests = async(accessToken: string) => {
+export const fetchQuests = async(accessToken: string | undefined) => {
   try {
     const response = await fetch(`${ process.env.EXPO_PUBLIC_DEV_SERVER }/quests`, {
       method: "GET",
