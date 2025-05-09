@@ -11,15 +11,20 @@ import { getUserAccessToken } from "@/app/utils/getAccessToken";
 import { useStateContext } from "@/app/contexts/stateContext";
 
 import { Quest } from "@/app/types/quest.types";
+import QuestModal from "@/app/components/questModal";
 
 
 const Home = () => {
   const [dailyGoalCount,setDailyGoalCount] = useState<number>(2);
-  const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const { questList, setQuestList } = useStateContext();
-  const credentials = FIREBASE_AUTH.currentUser;
+  const [questModalTitle, setQuestModalTitle] = useState("");
   
+  const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
+  const credentials = FIREBASE_AUTH.currentUser;
+
+    
   
   useEffect(() => {
     setLoading(true);
@@ -78,14 +83,27 @@ const Home = () => {
                 title={ quest.title } 
                 quest_type={ quest.quest_type } 
                 quest_status={ quest.quest_status }
+                modalVisible={ modalVisible }
+                setModalVisible={ setModalVisible }
+                onPress={ () => {
+                  setQuestModalTitle(quest.title);    
+                  setModalVisible(true); 
+                } 
+              }
               />
             ))
             : null
           }
         </View>
 
+        <View>
+          <QuestModal onClose={ () => setModalVisible(false) } visible={ modalVisible } questTitle={ questModalTitle } />
+        </View>
 
-        <AddQuestModal />
+        <View>
+          <AddQuestModal />
+        </View>
+
       </View>
     </SafeAreaView>
   );
