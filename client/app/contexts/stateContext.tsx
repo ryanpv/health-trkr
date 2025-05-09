@@ -10,7 +10,7 @@ type Quest = {
 };
 
 interface ContextType {
-  questList: Quest[],
+  questList: Quest[] | [],
   setQuestList: Dispatch<SetStateAction<Quest[]>>
 };
 
@@ -18,14 +18,7 @@ export const StateContext = createContext<ContextType | null>(null);
 
 
 export const StateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [questList, setQuestList] = useState<Quest[]>([{
-      date: "",
-      id: null,
-      quest_status: "incomplete",
-      quest_type: "",
-      title: ""
-    }]
-  );
+  const [questList, setQuestList] = useState<Quest[] | []>([]);
   
 
   const values: ContextType = {
