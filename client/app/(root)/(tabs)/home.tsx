@@ -27,8 +27,8 @@ const Home = () => {
     
   
   useEffect(() => {
-    setLoading(true);
     const getQuests = async () => {
+      setLoading(true);
       try {
         const accessToken = await getUserAccessToken();
         const fetchQuestList = await fetchQuests(accessToken);
@@ -36,12 +36,14 @@ const Home = () => {
         console.log("getQuests: ", fetchQuestList)
       } catch (error) {
         console.log("Error fetching quests: ", error)
+      } finally {
+        setLoading(false);
       }
     };
 
     getQuests();
+    console.log("questlist: ", questList)
 
-    setLoading(false);
   }, []);
 
   return (
