@@ -1,18 +1,19 @@
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { useState } from "react";
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native"
-
+import { useStateContext } from "../contexts/stateContext";
 
 type QuestModalProps = {
   onClose: () => void;
-  visible: boolean;
+  modalVisible: boolean;
   questTitle: string;
   questId: number;
 };
 
-const QuestModal: React.FC<QuestModalProps> = ({ onClose, visible, questTitle, questId }) => {
+const QuestModal: React.FC<QuestModalProps> = ({ onClose, modalVisible, questTitle, questId }) => {
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
+  const { questList, setQuestList } = useStateContext();
 
   const deleteQuest = async() => {
     try {
@@ -30,7 +31,10 @@ const QuestModal: React.FC<QuestModalProps> = ({ onClose, visible, questTitle, q
         }
       });
 
-      console.log("delete response: ", response)
+      if (!response.ok) throw new Error("Unable to complete DELETE request for quest")
+
+      setQuestList((prev) => prev.filter(quest => quest.id !== questId));
+      onClose();
     } catch (error) {
       console.log("Error: ", error)
     }
@@ -48,7 +52,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ onClose, visible, questTitle, q
   return (
     <View>
       <Modal
-       visible={ visible }
+       visible={ modalVisible }
        animationType="slide"
        transparent={ true }
       >
