@@ -6,6 +6,9 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { getUserCredentials } from "@/app/utils/getCredentials";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { fetchQuests } from "../utils/api";
+
+import { useStateContext } from "@/app/contexts/stateContext";
 
 
 type QuestFormData = {
@@ -15,6 +18,7 @@ type QuestFormData = {
 
 
 const AddQuestModal: React.FC = () => {
+  const { questList, setQuestList } = useStateContext();
   const [modalVisible, setModalVisible] = useState(false);
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const { control, handleSubmit } = useForm<QuestFormData>({
@@ -29,8 +33,7 @@ const AddQuestModal: React.FC = () => {
       const credentials = FIREBASE_AUTH.currentUser
 
       if (!credentials) {
-        console.log("User is not authenticated");
-        return;
+        throw new Error("No valid credentials. Please log in.")
       }
 
       const accessToken = await credentials.getIdToken();
@@ -48,15 +51,15 @@ const AddQuestModal: React.FC = () => {
         }),
       });
 
-      
       if (response.ok) {
-        const data = await response.json();
-        console.log("RETURNED DATA: ", data);
+        const fetchNewQuests = await fetchQuests(accessToken);
+        setQuestList(fetchNewQuests)
       }
 
     } catch (error: unknown) {
       console.log("Error: ", error);
     }
+
   };
 
   return (
