@@ -23,6 +23,10 @@ class QuestCreate(QuestBase):
     pass
 
 
+class QuestDelete(QuestBase):
+    quest_id: int
+
+
 class QuestCreateResponse(SQLModel):
     id: int
     message: str = "Successfully created quest"
