@@ -19,7 +19,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const { questList, setQuestList } = useStateContext();
-  const [questModalTitle, setQuestModalTitle] = useState("");
+  const [questModal, setQuestModal] = useState<{ title: string, id: number }>({ title: "", id: 0 });
   
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
@@ -83,12 +83,12 @@ const Home = () => {
             questList.map((quest) => (
               <QuestButton 
                 title={ quest.title } 
-                quest_type={ quest.quest_type } 
-                quest_status={ quest.quest_status }
+                questType={ quest.quest_type } 
+                questStatus={ quest.quest_status }
                 modalVisible={ modalVisible }
                 setModalVisible={ setModalVisible }
                 onPress={ () => {
-                  setQuestModalTitle(quest.title);    
+                  setQuestModal({ title: quest.title, id: quest.id });    
                   setModalVisible(true); 
                 } 
               }
@@ -99,7 +99,7 @@ const Home = () => {
         </View>
 
         <View>
-          <QuestModal onClose={ () => setModalVisible(false) } visible={ modalVisible } questTitle={ questModalTitle } />
+          <QuestModal onClose={ () => setModalVisible(false) } visible={ modalVisible } questTitle={ questModal.title } questId={ questModal.id } />
         </View>
 
         <View>
