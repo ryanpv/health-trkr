@@ -4,13 +4,13 @@ import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "r
 import { useStateContext } from "../contexts/stateContext";
 
 type QuestModalProps = {
-  onClose: () => void;
+  closeModal: () => void;
   modalVisible: boolean;
   questTitle: string;
   questId: number;
 };
 
-const QuestModal: React.FC<QuestModalProps> = ({ onClose, modalVisible, questTitle, questId }) => {
+const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, questTitle, questId }) => {
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
   const { questList, setQuestList } = useStateContext();
@@ -34,7 +34,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ onClose, modalVisible, questTit
       if (!response.ok) throw new Error("Unable to complete DELETE request for quest")
 
       setQuestList((prev) => prev.filter(quest => quest.id !== questId));
-      onClose();
+      closeModal();
     } catch (error) {
       console.log("Error: ", error)
     }
@@ -68,7 +68,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ onClose, modalVisible, questTit
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={ onClose }
+              onPress={ closeModal }
             >
               <View className="flex-1 rounded-md bg-green-400 p-2 items-center justify-center shadow-xl w-24">
                 <Text className="text-white font-semibold text-lg">Complete</Text>
@@ -76,7 +76,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ onClose, modalVisible, questTit
             </TouchableOpacity>
             
             <TouchableOpacity
-              onPress={ onClose}
+              onPress={ closeModal }
               >
               <View className="flex-1 rounded-md bg-blue-200 p-2 items-center justify-center w-24">
                   <Text className="font-semibold text-gray-500 text-lg">Postpone</Text>

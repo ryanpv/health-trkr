@@ -99,7 +99,7 @@ const Home = () => {
         </View>
 
         <View>
-          <QuestModal onClose={ () => setModalVisible(false) } modalVisible={ modalVisible } questTitle={ questModal.title } questId={ questModal.id } />
+          <QuestModal closeModal={ () => setModalVisible(false) } modalVisible={ modalVisible } questTitle={ questModal.title } questId={ questModal.id } />
         </View>
 
         <View>
