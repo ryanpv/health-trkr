@@ -1,7 +1,33 @@
 import { View, Text, ScrollView } from "react-native"
 import QuestButton from "@/app/components/questButton";
+import { useStateContext } from "@/app/contexts/stateContext";
+import React, { useState } from "react";
+import { fetchQuests } from "@/app/utils/api";
+import { getUserAccessToken } from "@/app/utils/getAccessToken";
+
 
 const Quests = () => {
+  const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [questModal, setQuestModal] = useState<{ title: string, id: number }>({ title: "", id: 0 });
+  const { questList, setQuestList } = useStateContext();
+  
+  React.useEffect(() => {
+    const getQuests = async () => {
+      setLoading(true);
+      try {
+        const accessToken = await getUserAccessToken();
+        const fetchQuestList = await fetchQuests(accessToken);
+        setQuestList(fetchQuestList);
+      } catch (error) {
+        console.log("Unable to fetch quests: ", error)
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getQuests();
+  },[])
 
   return (
     <ScrollView className="bg-blue-400 min-h-screen pb-20 p-5 flex items-center">
@@ -21,9 +47,23 @@ const Quests = () => {
         </View>
 
         <View className="flex gap-y-5 my-5">
-          <QuestButton />
-          <QuestButton />
-          <QuestButton />
+          { !loading && questList.length > 0 ?
+            questList.filter((quest) => quest.quest_type === "daily").map((quest) => (
+              <QuestButton 
+                title={ quest.title } 
+                questType={ quest.quest_type } 
+                questStatus={ quest.quest_status }
+                modalVisible={ modalVisible }
+                setModalVisible={ setModalVisible }
+                onPress={ () => {
+                  setQuestModal({ title: quest.title, id: quest.id });    
+                  setModalVisible(true); 
+                } 
+              }
+              />
+            ))
+            : null
+          }
         </View>
 
         <Text className="font-semibold text-xl my-5">Weekly Goals</Text>
@@ -35,9 +75,23 @@ const Quests = () => {
         </View>
 
         <View className="flex gap-y-5 my-5">
-          <QuestButton />
-          <QuestButton />
-          <QuestButton />
+          { !loading && questList.length > 0 ?
+            questList.filter((quest) => quest.quest_type === "weekly").map((quest) => (
+              <QuestButton 
+                title={ quest.title } 
+                questType={ quest.quest_type } 
+                questStatus={ quest.quest_status }
+                modalVisible={ modalVisible }
+                setModalVisible={ setModalVisible }
+                onPress={ () => {
+                  setQuestModal({ title: quest.title, id: quest.id });    
+                  setModalVisible(true); 
+                } 
+              }
+              />
+            ))
+            : null
+          }
         </View>
       </View>
     </ScrollView>
