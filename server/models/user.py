@@ -13,7 +13,7 @@ class UserCreate(SQLModel):
 
 class User(UserCreate, table=True):
     id: int = Field(default=None, primary_key=True)
-    __tablename__ = "users"
+    __tablename__ = "users" # type: ignore
 
 
 class UserStats(SQLModel, table=True):

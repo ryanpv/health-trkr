@@ -10,7 +10,7 @@ from models.quest import (
     QuestDelete,
 )
 from models.user import User
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.get_user_id import get_cached_uid
@@ -27,7 +27,7 @@ async def get_quests(
         user_id = await get_cached_uid(firebase_uid=uid)
 
         result = await session.execute(
-            select(Quest).where(Quest.user_id == user_id).order_by(Quest.date.desc())
+            select(Quest).where(Quest.user_id == user_id).order_by(desc(Quest.date)) # type: ignore
         )
         quests = result.scalars().all()
         print(f"quests: {quests}")
@@ -80,7 +80,7 @@ async def delete_quest(
 
         # Check if quest exists
         result = await session.execute(
-            select(Quest).where(Quest.id == quest_id, Quest.user_id == user_id)
+            select(Quest).where(and_(Quest.id == quest_id & Quest.user_id == user_id))
         )
 
         quest = result.scalar_one_or_none()
