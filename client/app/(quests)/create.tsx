@@ -2,7 +2,7 @@ import { Text , View, Modal, TouchableOpacity, Image, TextInput, StyleSheet } fr
 import React, { useState } from "react";
 import { icons } from '@/constants';
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-
+import { Dropdown } from 'react-native-element-dropdown';
 import Icon from "react-native-vector-icons/FontAwesome";
 import { getUserCredentials } from "@/app/utils/getCredentials";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
@@ -10,6 +10,9 @@ import { fetchQuests } from "../utils/api";
 
 import { useStateContext } from "@/app/contexts/stateContext";
 
+type AddQuestModalProps = {
+  closeModal: () => void
+}
 
 type QuestFormData = {
   questTitle: string;
@@ -17,7 +20,7 @@ type QuestFormData = {
 }
 
 
-const AddQuestModal: React.FC = () => {
+const AddQuestModal: React.FC<AddQuestModalProps> = ({ closeModal }) => {
   const { questList, setQuestList } = useStateContext();
   const [modalVisible, setModalVisible] = useState(false);
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
@@ -27,7 +30,25 @@ const AddQuestModal: React.FC = () => {
       quest_type: '',
     }
   });
-  
+  const [dropdownValue, setDropdownValue] = useState(null);
+  const [dropdownFocus, setDropdownFocus] = useState(false);
+
+  const questDropDownData = [
+    { label: "Daily", value: "daily" },
+    { label: "Weekly", value: "weekly" }
+  ];
+
+  const dropdownLabel = () => {
+    if (dropdownValue || dropdownFocus) {
+      return (
+        <Text>
+          Dropdown label
+        </Text>
+      )
+    }
+  };
+
+
   const submitQuest = async (formData: QuestFormData) => {
     try {
       const credentials = FIREBASE_AUTH.currentUser
@@ -37,7 +58,6 @@ const AddQuestModal: React.FC = () => {
       }
 
       const accessToken = await credentials.getIdToken();
-
       const response = await fetch(`${ serverUrl }/quests`, {
         method: "POST",
         credentials: "include",
@@ -55,11 +75,11 @@ const AddQuestModal: React.FC = () => {
         const fetchNewQuests = await fetchQuests(accessToken);
         setQuestList(fetchNewQuests)
       }
-
+      
+      closeModal();
     } catch (error: unknown) {
       console.log("Error: ", error);
     }
-
   };
 
   return (
@@ -70,7 +90,7 @@ const AddQuestModal: React.FC = () => {
           animationType="fade"
           transparent={ true }
         >
-          <View className="flex items-center bg-blue-200 w-full shadow-xl h-screen">
+          <View className="flex items-center bg-blue-200 w-full shadow-xl h-screen space-y-3">
             {/* FORM HEADER  */}
             <View className="p-5 flex flex-row w-screen space-x-5 justify-between">
               <Text className="font-semibold text-xl">Add New Quest</Text>
@@ -98,6 +118,23 @@ const AddQuestModal: React.FC = () => {
                     style={ styles.input }
                   />
                 )}
+              />
+            </View>
+
+            {/* { FORM DROPDOWN } */}
+            <View className="w-screen">
+              { dropdownLabel() }
+              <Dropdown
+                style={ styles.input }
+                data={ questDropDownData }
+                search={ false }
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                value={ dropdownValue }
+                placeholder="Quest type..."
+                placeholderStyle={ styles.placeHolder }
+                onChange={ item => setDropdownValue(item.value) }
               />
             </View>
 
@@ -157,6 +194,13 @@ const styles = StyleSheet.create({
     right: 0, 
     bottom: 0,
   },
+  placeHolder: {
+    fontSize: 18,
+    color: "gray"
+  },
+  selectedTextStyle: {
+    fontSize: 18,
+  }
 });
 
 
