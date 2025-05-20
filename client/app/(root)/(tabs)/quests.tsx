@@ -1,5 +1,5 @@
 import { View, Text, ScrollView } from "react-native"
-import QuestButton from "@/app/components/questButton";
+import QuestButton from "@/app/components/quests/questButton";
 import { useStateContext } from "@/app/contexts/stateContext";
 import React, { useState } from "react";
 import { fetchQuests } from "@/app/utils/api";
