@@ -11,7 +11,6 @@ import { fetchQuests } from "../utils/api";
 import { useStateContext } from "@/app/contexts/stateContext";
 
 type AddQuestModalProps = {
-  closeModal: () => void
 }
 
 type QuestFormData = {
@@ -20,7 +19,7 @@ type QuestFormData = {
 }
 
 
-const AddQuestModal: React.FC<AddQuestModalProps> = ({ closeModal }) => {
+const AddQuestModal: React.FC<AddQuestModalProps> = () => {
   const { questList, setQuestList } = useStateContext();
   const [modalVisible, setModalVisible] = useState(false);
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
@@ -76,9 +75,10 @@ const AddQuestModal: React.FC<AddQuestModalProps> = ({ closeModal }) => {
         setQuestList(fetchNewQuests)
       }
       
-      closeModal();
     } catch (error: unknown) {
       console.log("Error: ", error);
+    } finally {
+      setModalVisible(false);
     }
   };
 
