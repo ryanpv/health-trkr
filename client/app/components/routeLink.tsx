@@ -21,7 +21,7 @@ const RouteLink: React.FC<NavCardProps> = ({ routeName, icon, link }) => {
   return (
     <TouchableOpacity
       onPress={ () => {
-        router.replace(link as any);
+        router.replace(link as any)
       }}
     >
       <View className="flex flex-row gap-x-5">

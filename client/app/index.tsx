@@ -14,25 +14,25 @@ const Home = () => {
       </View>
 
       <TouchableOpacity
-        className="m-5 border border-2 flex flex-wrap rounded-full border-blue-500"
+        className="m-5 border-2 flex flex-wrap rounded-full border-blue-500"
         onPress={ () => {
-          router.replace("../home");
+          router.replace("./home")
         } }
       >
         <Text className="px-5 py-3 text-center font-semibold text-orange-500 text-md underline">Continue</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        className="m-5 border border-2 flex flex-wrap rounded-full border-blue-500"
+        className="m-5 border-2 flex flex-wrap rounded-full border-blue-500"
         onPress={ () => {
-          router.replace("./signup");
+          router.replace("./signup")
         } }
       >
         <Text className="px-5 py-3 text-center font-semibold text-orange-500 text-md underline">SIGNUP</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        className="m-5 border border-2 flex flex-wrap rounded-full border-blue-500"
+        className="m-5 border-2 flex flex-wrap rounded-full border-blue-500"
         onPress={ () => {
-          router.replace("./login");
+          router.replace("./login")
         } }
       >
         <Text className="px-5 py-3 text-center font-semibold text-orange-500 text-md underline">LOG IN</Text>
