@@ -1,7 +1,7 @@
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { useState } from "react";
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native"
-import { useStateContext } from "../contexts/stateContext";
+import { useStateContext } from "@/app/contexts/stateContext";
 
 type QuestModalProps = {
   closeModal: () => void;

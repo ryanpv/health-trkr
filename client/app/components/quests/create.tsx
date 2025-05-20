@@ -6,7 +6,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Icon from "react-native-vector-icons/FontAwesome";
 import { getUserCredentials } from "@/app/utils/getCredentials";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { fetchQuests } from "../utils/api";
+import { fetchQuests } from "@/app/utils/api";
 
 import { useStateContext } from "@/app/contexts/stateContext";
 
@@ -15,7 +15,7 @@ type AddQuestModalProps = {
 
 type QuestFormData = {
   questTitle: string;
-  quest_type: string;
+  questType: string;
 }
 
 
@@ -23,10 +23,10 @@ const AddQuestModal: React.FC<AddQuestModalProps> = () => {
   const { questList, setQuestList } = useStateContext();
   const [modalVisible, setModalVisible] = useState(false);
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
-  const { control, handleSubmit } = useForm<QuestFormData>({
+  const { control, handleSubmit, reset } = useForm<QuestFormData>({
     defaultValues: {
       questTitle: '',
-      quest_type: '',
+      questType: '',
     }
   });
   const [dropdownValue, setDropdownValue] = useState(null);
@@ -66,15 +66,15 @@ const AddQuestModal: React.FC<AddQuestModalProps> = () => {
         },
         body: JSON.stringify({
           title: formData.questTitle,
-          quest_type: "daily",
+          quest_type: formData.questType,
         }),
       });
 
       if (response.ok) {
         const fetchNewQuests = await fetchQuests(accessToken);
-        setQuestList(fetchNewQuests)
+        setQuestList(fetchNewQuests);
+        reset();
       }
-      
     } catch (error: unknown) {
       console.log("Error: ", error);
     } finally {
@@ -105,43 +105,52 @@ const AddQuestModal: React.FC<AddQuestModalProps> = () => {
             </View>
 
             {/* FORM INPUT */}
-            <View className="w-screen">
+            <View className="w-screen space-y-3">
               <Controller
                 name="questTitle"
-                control={ control }
-                render={({ field: { onChange, value }}) => (
-                  <TextInput 
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
                     placeholder="Enter quest title"
                     placeholderTextColor={"gray"}
-                    onChange={ onChange}
-                    value={ value }
-                    style={ styles.input }
+                    onChangeText={onChange}
+                    value={value}
+                    style={styles.input}
+                  />
+                )}
+              />
+            {/* { FORM DROPDOWN } */}
+              <Controller
+                name="questType"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <Dropdown
+                    style={styles.input}
+                    data={questDropDownData}
+                    search={false}
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    value={value}
+                    placeholder="Quest type..."
+                    placeholderStyle={styles.placeHolder}
+                    onChange={item => onChange(item.value)}
                   />
                 )}
               />
             </View>
 
-            {/* { FORM DROPDOWN } */}
-            <View className="w-screen">
-              { dropdownLabel() }
-              <Dropdown
-                style={ styles.input }
-                data={ questDropDownData }
-                search={ false }
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                value={ dropdownValue }
-                placeholder="Quest type..."
-                placeholderStyle={ styles.placeHolder }
-                onChange={ item => setDropdownValue(item.value) }
-              />
-            </View>
-
             {/* FORM SUBMIT BUTTON */}
-            <TouchableOpacity className="bg-blue-500 p-3 px-5 my-5 rounded" onPress={ handleSubmit(submitQuest) }>
-              <Text className="text-white text-center text-lg">Save</Text>
-            </TouchableOpacity>
+            <View className="flex flex-row space-x-3">
+              <TouchableOpacity className="bg-blue-500 p-3 px-5 my-5 rounded" onPress={ handleSubmit(submitQuest) }>
+                <Text className="text-white text-center text-lg">Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity className="bg-gray-500 p-3 px-5 my-5 rounded" onPress={ () => reset() }>
+                <Text className="text-white text-center text-lg">Reset</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
       </View>
