@@ -11,7 +11,7 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signOut } from "firebase/auth";
 
 // Context
-import { useAuthContext } from "../context"; // Custom authentication context
+import { useAuthContext } from "../../contexts/context"; // Custom authentication context
 
 // Components
 import RouteLink from "@/app/components/routeLink"; // Navigation link component
