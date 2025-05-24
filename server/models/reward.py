@@ -4,13 +4,18 @@ from sqlalchemy import Column, DateTime, text
 from sqlmodel import Field, SQLModel
 
 
-class Reward(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
+class RewardBase(SQLModel):
     title: str
-    points_cost: int
-    user_id: int = Field(foreign_key="users.id")
     status: str = Field(default="not_redeemed")
+    points_cost: int
+
+
+class Reward(RewardBase, table=True): # type: ignore
+    id: int = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="users.id")
     date: datetime = Field(
         sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
     )
   
+class RewardCreate(RewardBase):
+    pass
