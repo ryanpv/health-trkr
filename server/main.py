@@ -10,6 +10,7 @@ from firebase_admin import app_check, auth, credentials
 
 # Route Imports
 from routers.quest import router as quest_router
+from routers.reward import router as reward_router
 from routers.user import router as user_router
 
 logger = logging.getLogger(__name__)
@@ -88,3 +89,4 @@ async def token_test(token: str):
 # Routers
 app.include_router(quest_router)
 app.include_router(user_router)
+app.include_router(reward_router)
