@@ -19,6 +19,7 @@ import LogoutModal from "@/app/components/logoutModal"; // Logout confirmation m
 
 // Utils
 import { getUserCredentials } from "@/app/utils/getCredentials"; // Function to retrieve user credentials
+import { logout } from "@/app/utils/logout";
 
 // Constants
 import { icons } from "@/constants"; // Icon assets
@@ -50,28 +51,6 @@ const Profile = () => {
     console.log("fetching user creds")
     userCreds();
   }, []);
-
-  const logout = async () => {
-    try {
-      setLoading(true);
-      const userSignOut = await signOut(FIREBASE_AUTH);
-
-      await Promise.all([
-        deleteCredentials("uid"),
-        deleteCredentials("displayName"),
-      ]);
-
-      setModalVisible(false);
-      console.log("User logged out: ", userSignOut);
-
-      router.replace("/login");      
-    } catch (error) {
-      console.error("Error: ", error);
-      setError("Error logging out. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <ScrollView className="bg-blue-400 h-screen p-5 flex items-center">
@@ -144,7 +123,7 @@ const Profile = () => {
             icon={ { name: "cog-sharp", size: 20, color: "red"} } 
             link="./settings"
           />
-          <LogoutModal logout={ logout } />
+          <LogoutModal logout={ () => logout(setLoading, setModalVisible, setError) } />
         </View>
 
       </View>
