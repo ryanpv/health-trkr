@@ -13,6 +13,8 @@ import { useForm, Controller } from "react-hook-form";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { icons } from "@/constants";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { useStateContext } from "@/app/contexts/stateContext";
+import { fetchRewards } from "@/app/utils/api";
 
 type RewardsFormData = {
   rewardTitle: string;
@@ -27,10 +29,41 @@ const AddRewardModal: FC = () => {
       rewardTitle: '',
     }
   });
+  const { rewardList, setRewardList } = useStateContext();
 
 
-  const submitNewReward = async() => {
+  const submitNewReward = async(formData: RewardsFormData) => {
+    try {
+      const credentials = FIREBASE_AUTH.currentUser;
+      if (!credentials) {
+        throw new Error("No valid credentials. Please log in.")
+      }
 
+      const accessToken = await credentials.getIdToken();
+
+      const response = await fetch(`${ serverUrl }/rewards`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Authorization": `Bearer ${ accessToken }`,
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          title: formData.rewardTitle
+        })
+      });
+
+      if (response.ok) {
+        const rewards = await fetchRewards(accessToken);
+        setRewardList(rewardList);
+        reset();
+      }
+    } catch (error) {
+      console.log("ERROR adding new reward: ", error)
+    } finally {
+      reset();
+      setModalVisible(false);
+    }
   };
 
 
