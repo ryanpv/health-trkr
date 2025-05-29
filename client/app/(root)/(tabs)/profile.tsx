@@ -123,7 +123,12 @@ const Profile = () => {
             icon={ { name: "cog-sharp", size: 20, color: "red"} } 
             link="./settings"
           />
-          <LogoutModal logout={ () => logout(setLoading, setModalVisible, setError) } />
+          <LogoutModal logout={ () => {
+              logout(setLoading, setModalVisible, setError) 
+              router.replace("/login");      
+            } 
+          }
+          />
         </View>
 
       </View>
