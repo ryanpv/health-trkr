@@ -1,12 +1,14 @@
+from typing import cast
+
+from aiocache import Cache
 from auth.verify_token_basic import verify_token_basic
-from database import get_session, async_session
+from database import async_session, get_session
 from fastapi import Depends, HTTPException
 from models.user import User
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from async_lru import alru_cache
-from typing import cast
 
+cache = Cache(Cache.MEMORY)
 
 async def fetch_user_id(
     session: AsyncSession = Depends(get_session),
@@ -20,16 +22,18 @@ async def fetch_user_id(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user.id
-
-
-@alru_cache(maxsize=100)
+    
 async def get_cached_uid(firebase_uid: str) -> int:
+    cached = await cache.get(firebase_uid)
+    print(f"***CACHED uid: {cached}")
+    if cached is not None:
+        return cached
+    
     async with async_session() as session:
         user_id = await fetch_user_id(session=session, firebase_uid=firebase_uid)
 
         if not isinstance(user_id, int):
-            raise ValueError(
-                f"Expected userID as int, but got: {type(user_id)} with value {user_id}"
-            )
-
-        return cast(int, user_id)
+            raise ValueError(f"Expected int userID but got {type(user_id)}")
+        
+        await cache.set(firebase_uid, user_id)
+        return user_id
