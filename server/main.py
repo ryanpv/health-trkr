@@ -1,10 +1,13 @@
 import logging
 
 import firebase_admin
+from aiocache import Cache
+from auth.get_user_id import get_cached_uid
+from auth.verify_token_basic import verify_token_basic
 from config import config
 from database import engine, init_db, test_connection
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import app_check, auth, credentials
 
@@ -52,6 +55,11 @@ firebase_credentials = {
 cred = credentials.Certificate(firebase_credentials)
 firebase_admin.initialize_app(cred)
 
+
+# Cache
+cache = Cache(Cache.MEMORY)
+
+
 # Database events
 @app.on_event("startup")
 async def on_startup():
@@ -84,6 +92,16 @@ async def token_test(token: str):
         print(f"PRINT TOKEN ERROR: {e}")
         logger.error(f"Error verifying token: {e}")
         return {"error": str(e)}
+    
+
+@app.delete("/logout")
+async def logout(firebase_uid: str = Depends(verify_token_basic)):
+    try:
+        await cache.delete(firebase_uid)
+
+        return { "Message": "Logout successful"}
+    except Exception as e:
+        print(f"Unable to log out user: {e}")
 
 
 # Routers
