@@ -1,3 +1,4 @@
+from auth.get_user_id import get_cached_uid
 from auth.verify_token_basic import verify_token_basic
 from database import get_session
 from fastapi import APIRouter, Depends, HTTPException
@@ -11,15 +12,11 @@ router = APIRouter()
 @router.get("/user", status_code=200)
 async def get_user(
     uid=Depends(verify_token_basic), session: AsyncSession = Depends(get_session)
-) -> int:
+):
     try:
-        result = await session.execute(select(User).where(User.firebase_uid == uid))
-        user = result.scalar_one_or_none()
+        user_id = await get_cached_uid(firebase_uid=uid)
 
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found.")
-
-        return user.id
+        return { "user_id": user_id }
     except Exception as e:
         print(f"Unable to retrieve user: {e}")
 
@@ -32,7 +29,7 @@ async def create_user(
 ):
   try:
     # Check if user exists
-    result = await session.execute(select(User).where(User.firebase_uid == uid))
+    result = await session.execute(select(User).where(User.firebase_uid == uid)) # type: ignore
     user_exists = result.scalar_one_or_none()
 
     if not user_exists:
