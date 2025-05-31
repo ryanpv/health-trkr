@@ -11,7 +11,7 @@ class QuestBase(SQLModel):
     quest_status: str = Field(default="incomplete")
 
 
-class Quest(QuestBase, table=True):
+class Quest(QuestBase, table=True): #type: ignore
     id: Optional[int] = Field(default=None, primary_key=True)
     date: Optional[datetime] = Field(
         default=None,
