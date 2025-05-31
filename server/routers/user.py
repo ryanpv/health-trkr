@@ -3,6 +3,7 @@ from auth.verify_token_basic import verify_token_basic
 from database import get_session
 from fastapi import APIRouter, Depends, HTTPException, status
 from models.user import User, UserCreate
+from services.user_services import check_user_existence
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -29,15 +30,12 @@ async def create_user(
 ):
   try:
     # Check if user exists
-    print(f"*** NEW USER DATA: {user_data}")
-    result = await session.execute(select(User).where(User.firebase_uid == uid)) # type: ignore
-    user = result.scalar_one_or_none()
-
-    if user:
-       raise HTTPException(
-          status_code=status.HTTP_409_CONFLICT,
-          detail="User already exists"
-       )
+    result = await check_user_existence(session, user_data, uid)
+    if result:
+        raise HTTPException(
+        status_code=status.HTTP_409_CONFLICT,
+        detail=result
+      )
 
     user = User(
       firebase_uid=uid,
@@ -50,7 +48,6 @@ async def create_user(
     await session.refresh(user)
 
     return { "message": "User created successfully", "user": user }   
-  
   except Exception as e:
     print(f"Error creating user: {e}")
     raise HTTPException(
