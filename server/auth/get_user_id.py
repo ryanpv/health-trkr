@@ -25,9 +25,13 @@ async def fetch_user_id(
     
 async def get_cached_uid(firebase_uid: str) -> int:
     cached = await cache.get(firebase_uid)
-    print(f"***CACHED uid: {cached}")
     if cached is not None:
+        print(f"***CACHED uid: {cached}")
         return cached
+    else:
+        print(f"*** NEW VALUE OF CACHED ID: {cached}")
+
+    
     
     async with async_session() as session:
         user_id = await fetch_user_id(session=session, firebase_uid=firebase_uid)
@@ -37,3 +41,7 @@ async def get_cached_uid(firebase_uid: str) -> int:
         
         await cache.set(firebase_uid, user_id)
         return user_id
+    
+async def remove_cached_uid(firebase_uid: str):
+    cached = await cache.delete(firebase_uid)
+    print(f"*** deleted cache: {cached}")

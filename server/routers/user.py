@@ -16,7 +16,6 @@ async def get_user(
     uid=Depends(verify_token_and_email), session: AsyncSession = Depends(get_session)
 ):
     try:
-        print(f"USER UID: {uid}")
         user_id = await get_cached_uid(firebase_uid=uid)
 
         return { "user_id": user_id }

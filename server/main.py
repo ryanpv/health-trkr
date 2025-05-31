@@ -2,7 +2,7 @@ import logging
 
 import firebase_admin
 from aiocache import Cache
-from auth.get_user_id import get_cached_uid
+from auth.get_user_id import get_cached_uid, remove_cached_uid
 from auth.verify_token_basic import verify_token_basic
 from config import config
 from database import engine, init_db, test_connection
@@ -97,7 +97,7 @@ async def token_test(token: str):
 @app.delete("/logout")
 async def logout(firebase_uid: str = Depends(verify_token_basic)):
     try:
-        await cache.delete(firebase_uid)
+        await remove_cached_uid(firebase_uid=firebase_uid)
 
         return { "Message": "Logout successful"}
     except Exception as e:
