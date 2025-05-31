@@ -20,7 +20,7 @@ router = APIRouter()
 # GET QUEST
 @router.get("/quests", response_model=list[QuestResponse], status_code=200)
 async def get_quests(
-    session: AsyncSession = Depends(get_session), uid: str = Depends(verify_token_basic)
+    session: AsyncSession = Depends(get_session), uid: str = Depends(verify_token_and_email)
 ):
     try:
         user_id = await get_cached_uid(firebase_uid=uid)

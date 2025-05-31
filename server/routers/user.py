@@ -1,4 +1,5 @@
 from auth.get_user_id import get_cached_uid
+from auth.verify_token_and_email import verify_token_and_email
 from auth.verify_token_basic import verify_token_basic
 from database import get_session
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -12,9 +13,10 @@ router = APIRouter()
 
 @router.get("/user", status_code=200)
 async def get_user(
-    uid=Depends(verify_token_basic), session: AsyncSession = Depends(get_session)
+    uid=Depends(verify_token_and_email), session: AsyncSession = Depends(get_session)
 ):
     try:
+        print(f"USER UID: {uid}")
         user_id = await get_cached_uid(firebase_uid=uid)
 
         return { "user_id": user_id }
