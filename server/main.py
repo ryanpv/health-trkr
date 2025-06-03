@@ -15,6 +15,7 @@ from firebase_admin import app_check, auth, credentials
 from routers.quest import router as quest_router
 from routers.reward import router as reward_router
 from routers.user import router as user_router
+from routers.user_stats import router as user_stats_router
 
 logger = logging.getLogger(__name__)
 
@@ -108,3 +109,4 @@ async def logout(firebase_uid: str = Depends(verify_token_basic)):
 app.include_router(quest_router)
 app.include_router(user_router)
 app.include_router(reward_router)
+app.include_router(user_stats_router)
