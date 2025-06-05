@@ -17,7 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 router = APIRouter()
 
 
-# GET QUEST
+# GET *INCOMPLETE* QUESTS
 @router.get("/quests", response_model=list[QuestResponse], status_code=200)
 async def get_quests(
     session: AsyncSession = Depends(get_session), uid: str = Depends(verify_token_and_email)
@@ -26,7 +26,7 @@ async def get_quests(
         user_id = await get_cached_uid(firebase_uid=uid)
 
         result = await session.execute(
-            select(Quest).where(Quest.user_id == user_id).order_by(asc(Quest.date)) # type: ignore
+            select(Quest).where(Quest.user_id == user_id, Quest.quest_status == "incomplete").order_by(asc(Quest.date)) # type: ignore
         )
         quests = result.scalars().all()
         print(f"quests: {quests}")
