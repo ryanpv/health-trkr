@@ -17,9 +17,10 @@ import QuestModal from "@/app/components/quests/questModal";
 type QuestData = {
   title: string,
   id: number,
-  questStatus: string,
-  questType: string,
-  date: string
+  quest_status: string,
+  quest_type: string,
+  date: string,
+  points: number
 }
 
 
@@ -31,9 +32,10 @@ const Home = () => {
   const [questModalData, setQuestModalData] = useState<QuestData>({
     title: '',
     id: 0,
-    questStatus: '',
-    questType: '',
-    date: ''
+    quest_status: '',
+    quest_type: '',
+    date: '',
+    points: 0
   });
   
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
@@ -107,9 +109,10 @@ const Home = () => {
                     setQuestModalData({
                       title: quest.title,
                       id: quest.id,
-                      questStatus: quest.quest_status,
-                      questType: quest.quest_type,
-                      date: quest.date
+                      quest_status: quest.quest_status,
+                      quest_type: quest.quest_type,
+                      date: quest.date,
+                      points: quest.quest_status == "daily" ? 100 : 200
                     });    
                     setModalVisible(true); 
                   } 

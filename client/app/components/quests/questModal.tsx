@@ -12,9 +12,10 @@ type QuestModalProps = {
 type QuestData = {
   title: string,
   id: number,
-  questStatus: string,
-  questType: string,
-  date: string
+  quest_status: string,
+  quest_type: string,
+  date: string,
+  points: number
 }
 
 const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, questData }) => {
@@ -55,24 +56,20 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
       }
       const accessToken = await credentials.getIdToken();
 
-      const data = {
-        quest_data: questData,
-        additional_points: 100,
-      }
-
       const request = await fetch(`${ serverUrl }/user_stats`, {
           method: "POST",
           headers: {
           "Authorization": `Bearer ${ accessToken }`,
           "Content-type": "application/json"
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify({ id: questData.id, quest_status: "complete" })
       });
 
       console.log("COMPLETED QUEST RESULT: ", request)
 
       // Update quest list
-
+      // setQuestList((prev) => prev.filter(quest => quest.id !== questData.id));
+      // closeModal();
     } catch (error: unknown) {
       console.log("Error completing quest: ", error)
     }
