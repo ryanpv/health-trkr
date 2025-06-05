@@ -41,3 +41,11 @@ class QuestResponse(SQLModel):
     date: datetime = Field(
         sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
     )
+
+class QuestUpdate(SQLModel):
+    id: int
+    title: Optional[str] = None
+    quest_type: Optional[str] = None
+    quest_status: Optional[str] = None
+    date: Optional[datetime] = None
+    points: Optional[int] = None
