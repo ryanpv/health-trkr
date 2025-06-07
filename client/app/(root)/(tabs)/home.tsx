@@ -112,7 +112,7 @@ const Home = () => {
                       quest_status: quest.quest_status,
                       quest_type: quest.quest_type,
                       date: quest.date,
-                      points: quest.quest_status == "daily" ? 100 : 200
+                      points: quest.quest_type == "daily" ? 100 : 200
                     });    
                     setModalVisible(true); 
                   } 
