@@ -5,7 +5,7 @@ from auth.verify_token_and_email import verify_token_and_email
 from database import get_session
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from models.quest import Quest, QuestUpdate
-from models.user_stats import UserStatsBase
+from models.user_stats import UserStats
 from sqlalchemy import insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -47,11 +47,11 @@ async def post_user_stats(
       # Update user stats
       curr_time = datetime.now()
 
-      check_stats = await session.execute(select(UserStatsBase).where(UserStatsBase.user_id == user_id)) # type: ignore
+      check_stats = await session.execute(select(UserStats).where(UserStats.user_id == user_id)) # type: ignore
       user_stats = check_stats.scalar_one_or_none()
 
       if not user_stats:
-        new_stats = UserStatsBase(
+        new_stats = UserStats(
           user_id=user_id,
           total_points=points_to_add,
           current_daily_streak=1,
