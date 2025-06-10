@@ -17,6 +17,11 @@ from routers.reward import router as reward_router
 from routers.user import router as user_router
 from routers.user_stats import router as user_stats_router
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
+
 logger = logging.getLogger(__name__)
 
 load_dotenv()
