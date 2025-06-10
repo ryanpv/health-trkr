@@ -1,3 +1,5 @@
+import logging
+
 from auth.get_user_id import get_cached_uid
 from auth.verify_token_and_email import verify_token_and_email
 from database import get_session
@@ -5,6 +7,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from models.reward import Reward, RewardCreate
 from sqlalchemy import asc, select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -31,7 +35,7 @@ async def create_reward(
 
     return {"id": new_reward.id, "message": "Successfully created reward"}
   except Exception as e:
-    print(f"Error cxx reating reward: {e}")
+    logger.error(f"Unable to create user's reward: {e}")
     raise HTTPException(
       status_code=500, detail="Unable to create a reward at this time."
     )
@@ -56,7 +60,7 @@ async def get_rewards(
     return rewards
 
   except Exception as e:
-    print(f"Unable to retrieve user's rewards: {e}")
+    logger.error(f"Unable to retrieve user's rewards: {e}")
     raise HTTPException(
       status_code=500, detail="Unable to retrieve user rewards."
     )
