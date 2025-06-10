@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import Column, DateTime, text
 from sqlmodel import Field, SQLModel
@@ -19,3 +20,9 @@ class Reward(RewardBase, table=True): # type: ignore
   
 class RewardCreate(RewardBase):
     pass
+
+class RewardUpdate(SQLModel):
+    id: int
+    title: Optional[str] = None
+    status: Optional[str] = None
+    points_cost: Optional[int] = None
