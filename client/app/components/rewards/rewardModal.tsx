@@ -1,20 +1,50 @@
 import { useStateContext } from "@/app/contexts/stateContext";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { useState } from "react";
 import { Modal, View, Text, TouchableOpacity } from "react-native";
 
 type RewardModalProps = {
   closeModal: () => void;
   modalVisible: boolean;
-  rewardTitle: string;
-  rewardID: number;
+  rewardData: RewardData;
 };
 
-const RewardModal: React.FC<RewardModalProps> = ({ closeModal, modalVisible, rewardTitle, rewardID }) => {
+type RewardData = {
+  id: number,
+  title: string,
+  points_cost: number,
+}
+
+const RewardModal: React.FC<RewardModalProps> = ({ closeModal, modalVisible, rewardData }) => {
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
   const { setRewardList } = useStateContext();
-
+  const [loading, setLoading] = useState(false);
+  
   const claimReward = async() => {
+    try {
+      setLoading(true);
+      if (!credentials) throw new Error("No valid credentials. Please log in.")
+      
+      const accessToken = await credentials.getIdToken();
+      const response = await fetch(`${ serverUrl }/rewards`, {
+        method: "PATCH",
+        headers: {
+          "Authorization": `Bearer ${ accessToken }`,
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({ id: rewardData.id, points_cost: rewardData.points_cost })
+      });
+
+    } catch (error: unknown) {
+      console.log("Error claiming reward: ", error)
+    } finally {
+      closeModal();
+      setLoading(false);
+    }
+  };
+
+  const deleteReward = async() => {
 
   };
 
@@ -28,7 +58,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ closeModal, modalVisible, rew
        transparent={ true }
       >
         <View className="bg-blue-500 flex items-center justify-center m-auto p-5 rounded-md max-w-sm w-full shadow-xl">
-          <Text className="font-semibold text-xl text-white">{ rewardTitle }</Text>
+          <Text className="font-semibold text-xl text-white">{ rewardData.title }</Text>
           <View className="flex flex-row gap-x-5 justify-center my-5">
             <TouchableOpacity
               onPress={ claimReward }
