@@ -13,7 +13,7 @@ import { getUserAccessToken } from "@/app/utils/getAccessToken";
 const Rewards = () => {
   const [loading, setLoading] =  useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [rewardModalData, setRewardModalData] = useState<{ title: string, id: number }>({ title: "", id: 0 });
+  const [rewardModalData, setRewardModalData] = useState<{ title: string, id: number, points_cost: number }>({ title: "", id: 0, points_cost: 0 });
   const { rewardList, setRewardList } = useStateContext();
   
 
@@ -76,6 +76,7 @@ const Rewards = () => {
             modalVisible={ modalVisible } 
             rewardTitle={ rewardModalData.title }
             rewardID={ rewardModalData.id }
+            rewardCost={ rewardModalData.points_cost }
           />
         </View>
 
