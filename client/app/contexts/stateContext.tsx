@@ -10,9 +10,10 @@ type Quest = {
 };
 
 type Reward = {
-  date: string,
+  date?: string,
   id: number,
   title: string,
+  points_cost:  number,
 };
 
 interface ContextType {
