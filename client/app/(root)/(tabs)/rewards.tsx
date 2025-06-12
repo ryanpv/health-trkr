@@ -61,7 +61,17 @@ const Rewards = () => {
               rewardList.length > 0 ? 
               rewardList.map((reward) => (
                 <View>
-                  <RewardButton title={reward.title} onPress={ () => setModalVisible(true) } />
+                  <RewardButton 
+                    title={reward.title} 
+                    onPress={ () => {
+                      setRewardModalData({
+                        title: reward.title,
+                        id: reward.id,
+                        points_cost : reward.points_cost
+                      })
+                      setModalVisible(true)
+                    } }
+                  />
                 </View>
               ))
               :
@@ -74,9 +84,7 @@ const Rewards = () => {
           <RewardModal 
             closeModal={ () => setModalVisible(false) } 
             modalVisible={ modalVisible } 
-            rewardTitle={ rewardModalData.title }
-            rewardID={ rewardModalData.id }
-            rewardCost={ rewardModalData.points_cost }
+            rewardData={ rewardModalData }
           />
         </View>
 
