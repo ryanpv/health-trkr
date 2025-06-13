@@ -36,6 +36,9 @@ const RewardModal: React.FC<RewardModalProps> = ({ closeModal, modalVisible, rew
         body: JSON.stringify({ id: rewardData.id, points_cost: rewardData.points_cost })
       });
 
+      if (!response.ok) throw new Error("Unable to claim reward at this time.");
+
+      setRewardList((prev) => prev.filter(reward => reward.id !== rewardData.id));
     } catch (error: unknown) {
       console.log("Error claiming reward: ", error)
     } finally {
