@@ -33,7 +33,11 @@ const RewardModal: React.FC<RewardModalProps> = ({ closeModal, modalVisible, rew
           "Authorization": `Bearer ${ accessToken }`,
           "Content-type": "application/json"
         },
-        body: JSON.stringify({ id: rewardData.id, points_cost: rewardData.points_cost })
+        body: JSON.stringify({ 
+          id: rewardData.id, 
+          points_cost: rewardData.points_cost,
+          status: "redeemed"
+        })
       });
 
       if (!response.ok) throw new Error("Unable to claim reward at this time.");
