@@ -5,10 +5,9 @@ from auth.verify_token_and_email import verify_token_and_email
 from database import get_session
 from fastapi import APIRouter, Depends, HTTPException
 from models.reward import Reward, RewardCreate, RewardUpdate
+from models.user_stats import UserStats
 from sqlalchemy import asc, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from server.models.user_stats import UserStats
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +70,7 @@ async def get_rewards(
 # UPDATE REWARD
 @router.patch("/rewards", status_code=201)
 async def update_rewards(
-  reward_data = RewardUpdate,
+  reward_data: RewardUpdate,
   session: AsyncSession = Depends(get_session),
   uid: str = Depends(verify_token_and_email)
 ):
@@ -85,8 +84,8 @@ async def update_rewards(
       )
 
       reward = reward_row.scalar_one_or_none() 
-
       if reward is None:
+        logger.error("reward does not exist")
         raise HTTPException(status_code=404, detail="Reward does not exist.")
 
       # Update the reward
