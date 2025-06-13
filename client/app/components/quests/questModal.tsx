@@ -50,26 +50,27 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
 
   const completeQuest = async() => {
     try {
-      console.log("Completing quest...")
       if (!credentials) {
         throw new Error("No valid credentials. Please log in.")
       }
       const accessToken = await credentials.getIdToken();
 
-      const request = await fetch(`${ serverUrl }/user_stats`, {
+      const response = await fetch(`${ serverUrl }/user_stats`, {
           method: "POST",
           headers: {
           "Authorization": `Bearer ${ accessToken }`,
           "Content-type": "application/json"
           },
-          body: JSON.stringify({ id: questData.id, quest_status: "complete" })
+          body: JSON.stringify({ id: questData.id, quest_status: "complete", points: questData.points })
       });
 
-      console.log("COMPLETED QUEST RESULT: ", request)
+      console.log("COMPLETED QUEST RESULT: ", response)
 
+      if (!response.ok) throw new Error("Quest cannot be completed at this time.")
+        
       // Update quest list
-      // setQuestList((prev) => prev.filter(quest => quest.id !== questData.id));
-      // closeModal();
+      setQuestList((prev) => prev.filter(quest => quest.id !== questData.id));
+      closeModal();
     } catch (error: unknown) {
       console.log("Error completing quest: ", error)
     }
