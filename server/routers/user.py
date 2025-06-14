@@ -4,6 +4,7 @@ from auth.verify_token_basic import verify_token_basic
 from database import get_session
 from fastapi import APIRouter, Depends, HTTPException, status
 from models.user import User, UserCreate
+from models.user_stats import UserStats
 from services.user_services import check_user_existence
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,8 +18,27 @@ async def get_user(
 ):
     try:
         user_id = await get_cached_uid(firebase_uid=uid)
+        user_query = await session.execute(
+           select( # type: ignore
+              UserStats, 
+              User.email, # type: ignore
+              User.displayName) # type: ignore
+              .join(User, UserStats.user_id == User.id)
+              .where(UserStats.user_id == user_id)
+           ) # type: ignore
+        user_data = user_query.first()
 
-        return { "user_id": user_id }
+        if user_data is None:
+           raise HTTPException(status_code=404, detail="No available stats for user.")
+
+        user_stats, email, display_name = user_data
+        print(f"*** USER STATS: {user_stats}")
+        return { "data": {
+           "userId": user_stats.user_id,
+           "totalPoints": user_stats.total_points,
+           "email": email,
+           "displayName": display_name
+        } }
     except Exception as e:
         print(f"Unable to retrieve user: {e}")
 
