@@ -1,12 +1,11 @@
 import { Children, createContext, useContext, useState, Dispatch, SetStateAction } from "react";
 
+// State types imports
+import { User } from "@/app/types/state.types";
+
 interface AuthContextType {
   currentUser: string | User;
-  setCurrentUser: Dispatch<SetStateAction<string | User>>;
-};
-
-type User = {
-  currentUser: string;
+  setCurrentUser: Dispatch<SetStateAction<User>>;
 };
 
 
@@ -25,7 +24,11 @@ export const useAuthContext = () => {
 
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | string>({ currentUser: "InitialHomie" });
+  const [currentUser, setCurrentUser] = useState<User>({
+    email: '',
+    displayName: '',
+    totalPoints: 0
+  });
 
   const values: AuthContextType = {
     currentUser,
