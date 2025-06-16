@@ -1,20 +1,11 @@
 import React, { createContext, useContext, useState, Dispatch, SetStateAction } from "react";
 
+// State types imports
+import { 
+  Quest, 
+  Reward, 
+} from "@/app/types/state.types"
 
-type Quest = {
-  date: string,
-  id: number,
-  quest_status: string,
-  quest_type: string,
-  title: string
-};
-
-type Reward = {
-  date?: string,
-  id: number,
-  title: string,
-  points_cost:  number,
-};
 
 interface ContextType {
   questList: Quest[] | [],
@@ -23,8 +14,8 @@ interface ContextType {
   setRewardList: Dispatch<SetStateAction<Reward[]>>
 };
 
-export const StateContext = createContext<ContextType | null>(null);
 
+export const StateContext = createContext<ContextType | null>(null);
 
 export const StateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [questList, setQuestList] = useState<Quest[] | []>([]);
@@ -36,14 +27,14 @@ export const StateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setQuestList,
     rewardList,
     setRewardList,
-  }
+  };
 
   return (
     <StateContext.Provider value={ values }>
       { children }
     </StateContext.Provider>
   )
-}
+};
 
 export const useStateContext = () => {
   const context = useContext(StateContext)
