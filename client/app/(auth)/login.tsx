@@ -10,7 +10,7 @@ import { useRouter } from "expo-router";
 // Firebase auth imports
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useAuthContext } from "../(root)/context";
+import { useAuthContext } from "../contexts/context";
 
 
 type FormData = {
@@ -19,11 +19,15 @@ type FormData = {
 };
 
 
+
 const Login = () => {
   // State variables
   const [error, setError] = useState<string | null>(null);
-  const { currentUser, setCurrentUser } = useAuthContext();
   const [loading, setLoading] = useState(false);
+  const { 
+    currentUser, 
+    setCurrentUser,
+  } = useAuthContext();
 
   // Watch login form state changes
   const { watch, control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
@@ -41,7 +45,6 @@ const Login = () => {
       const userLogin = await signInWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password);
       const user = userLogin.user;
       const token = await user.getIdToken();
-      console.log("fb auth", FIREBASE_AUTH.currentUser)
       
       if (user) {
         const response = await fetch('http://localhost:8000/user', {
@@ -51,10 +54,13 @@ const Login = () => {
             "Content-type": 'application/json'
           }
         });
-        const userId = await response.json();
 
-        await storeUserCredentials(user.uid, user.displayName || '');
-        setCurrentUser(user.uid);
+        if (!response.ok) throw new Error("Unable to retrieve user info.");
+
+        const userData = await response.json();
+
+        await storeUserCredentials(user.uid || '');
+        setCurrentUser(userData);
 
         router.replace("/home");
       }
@@ -67,7 +73,7 @@ const Login = () => {
 
   const setCredentials = async (key: string, value: string): Promise<void> => {
     try {
-      // Store user credentials in localstorage during DEVELOPMENT
+      // Store user uid credentials in localstorage during DEVELOPMENT
       if (Platform.OS === "web") {
         localStorage.setItem(key, value);
       } else {
@@ -80,11 +86,10 @@ const Login = () => {
     }
   };
     
-  const storeUserCredentials = async (uid: string, displayName: string) => {
+  const storeUserCredentials = async (uid: string) => {
     try {
       await Promise.all([
         setCredentials("uid", uid),
-        setCredentials("displayName", displayName)
       ]);
     } catch (error) {
       console.error("ERROR storing user credentials", error);
