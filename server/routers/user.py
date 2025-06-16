@@ -34,7 +34,6 @@ async def get_user(
         user_stats, email, display_name = user_data
         print(f"*** USER STATS: {user_stats}")
         return { "data": {
-           "userId": user_stats.user_id,
            "totalPoints": user_stats.total_points,
            "email": email,
            "displayName": display_name
