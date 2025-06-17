@@ -10,8 +10,8 @@ import { fetchQuests } from "@/app/utils/api";
 import { getUserAccessToken } from "@/app/utils/getAccessToken";
 import { useStateContext } from "@/app/contexts/stateContext";
 
-import { Quest } from "@/app/types/quest.types";
 import QuestModal from "@/app/components/quests/questModal";
+import { useAuthContext } from "@/app/contexts/context";
 
 
 type QuestData = {
@@ -25,10 +25,11 @@ type QuestData = {
 
 
 const Home = () => {
-  const [dailyGoalCount,setDailyGoalCount] = useState<number>(2);
+  const [dailyGoalCount, setDailyGoalCount] = useState<number>(2);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const { questList, setQuestList } = useStateContext();
+  const { currentUser } =  useAuthContext();
   const [questModalData, setQuestModalData] = useState<QuestData>({
     title: '',
     id: 0,
@@ -38,8 +39,8 @@ const Home = () => {
     points: 0
   });
   
-  const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
-  const credentials = FIREBASE_AUTH.currentUser;
+  // const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
+  // const credentials = FIREBASE_AUTH.currentUser;
 
   
   useEffect(() => {
@@ -49,7 +50,7 @@ const Home = () => {
         const accessToken = await getUserAccessToken();
         const fetchQuestList = await fetchQuests(accessToken);
         setQuestList(fetchQuestList);
-        console.log("getQuests: ", fetchQuestList)
+        console.log("getQuests: ", fetchQuestList.length)
       } catch (error) {
         console.log("Error fetching quests: ", error)
       } finally {
@@ -71,7 +72,7 @@ const Home = () => {
               Welcome back,{" "}
             </Text>
             <Text className="font-semibold text-lg text-white">
-              User One
+              { currentUser.displayName }
             </Text>
           </View>
 

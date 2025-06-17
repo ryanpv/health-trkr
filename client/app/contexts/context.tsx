@@ -4,7 +4,7 @@ import { Children, createContext, useContext, useState, Dispatch, SetStateAction
 import { User } from "@/app/types/state.types";
 
 interface AuthContextType {
-  currentUser: string | User;
+  currentUser: User;
   setCurrentUser: Dispatch<SetStateAction<User>>;
 };
 

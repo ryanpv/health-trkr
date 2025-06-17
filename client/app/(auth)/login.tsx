@@ -60,7 +60,7 @@ const Login = () => {
         const userData = await response.json();
 
         await storeUserCredentials(user.uid || '');
-        setCurrentUser(userData);
+        setCurrentUser(userData.data);
 
         router.replace("/home");
       }

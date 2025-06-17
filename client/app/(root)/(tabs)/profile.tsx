@@ -21,11 +21,13 @@ import { logout } from "@/app/utils/logout";
 // Constants
 import { icons } from "@/constants"; // Icon assets
 import { deleteCredentials } from "@/app/utils/deleteCredentials";
+import { useAuthContext } from "@/app/contexts/context";
 
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { currentUser } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const Profile = () => {
         throw new Error("Token test failed");
       }
       const tokenTestResponse = await tokenTest.json();
-      console.log("Token test response: ", tokenTestResponse);
+      console.log("current user check: ", currentUser);
     }
     console.log("fetching user creds")
     userCreds();
@@ -61,14 +63,14 @@ const Profile = () => {
           </View>
 
           <View>
-            <Text className="font-semibold text-white text-xl">Full Name</Text>
-            <Text className="font-semibold text-gray-200">Username | Member since ****</Text>
+            <Text className="font-semibold text-white text-xl">{ currentUser.displayName }</Text>
+            <Text className="font-semibold text-gray-200">Member since ****</Text>
           </View>
         </View>
 
         <View className="bg-blue-200 p-5 rounded-md mt-10 flex flex-row gap-x-3 shadow shadow-xl">
           <Icon name="sparkles" size={ 30 } color={ "#ebc61e"}/>
-          <Text className="text-gray-600 font-semibold">Total points: </Text>
+          <Text className="text-gray-600 font-semibold">Total points: { currentUser.totalPoints }</Text>
         </View>
 
         <View className="flex flex-row gap-x-3 justify-center my-5">
