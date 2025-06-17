@@ -10,9 +10,6 @@ import * as SecureStore from "expo-secure-store";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signOut } from "firebase/auth";
 
-// Context
-import { useAuthContext } from "../../contexts/context"; // Custom authentication context
-
 // Components
 import RouteLink from "@/app/components/routeLink"; // Navigation link component
 import LogoutModal from "@/app/components/logoutModal"; // Logout confirmation modal
@@ -26,7 +23,6 @@ import { icons } from "@/constants"; // Icon assets
 import { deleteCredentials } from "@/app/utils/deleteCredentials";
 
 const Profile = () => {
-  const { currentUser } = useAuthContext();
   const [modalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
