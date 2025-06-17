@@ -4,6 +4,7 @@ import { useStateContext } from "@/app/contexts/stateContext";
 import React, { useState } from "react";
 import { fetchQuests } from "@/app/utils/api";
 import { getUserAccessToken } from "@/app/utils/getAccessToken";
+import { useAuthContext } from "@/app/contexts/context";
 
 
 const Quests = () => {
@@ -11,6 +12,7 @@ const Quests = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [questModal, setQuestModal] = useState<{ title: string, id: number }>({ title: "", id: 0 });
   const { questList, setQuestList } = useStateContext();
+  const { currentUser } = useAuthContext();
   
   React.useEffect(() => {
     const getQuests = async () => {
@@ -33,15 +35,15 @@ const Quests = () => {
     <ScrollView className="bg-blue-400 min-h-screen pb-20 p-5 flex items-center">
       <View className="flex max-w-xl w-full p-5">
         <View className="flex flex-row justify-between my-10">
-          <Text className="text-2xl font-semibold text-gray-800">Total Points: 0000</Text>
-          <Text className="text-2xl font-semibold text-gray-800">Credits: 000</Text>
+          <Text className="text-2xl font-semibold text-gray-800">Total Points: { currentUser.totalPoints }</Text>
+          {/* <Text className="text-2xl font-semibold text-gray-800">Credits: 000</Text> */}
         </View>
 
         
         <Text className="font-semibold text-xl my-5">Daily Goals</Text>
         <View className="bg-blue-200 p-5 rounded-md shadow shadow-xl">
           <View className="flex items-center">
-            <Text>99</Text>
+            <Text>{ currentUser.dailyStreak }</Text>
             <Text>Daily Streak</Text>
           </View>
         </View>
@@ -69,8 +71,8 @@ const Quests = () => {
         <Text className="font-semibold text-xl my-5">Weekly Goals</Text>
         <View className="bg-blue-200 p-5 rounded-md shadow shadow-xl">
           <View className="flex items-center">
-            <Text>99</Text>
-            <Text>Daily Streak</Text>
+            <Text>{ currentUser.weeklyStreak }</Text>
+            <Text>Weekly Streak</Text>
           </View>
         </View>
 

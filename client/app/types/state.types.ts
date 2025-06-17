@@ -17,4 +17,6 @@ export type User = {
   email: string,
   displayName: string,
   totalPoints: number;
+  dailyStreak: number;
+  weeklyStreak: number;
 };

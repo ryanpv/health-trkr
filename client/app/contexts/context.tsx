@@ -27,7 +27,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [currentUser, setCurrentUser] = useState<User>({
     email: '',
     displayName: '',
-    totalPoints: 0
+    totalPoints: 0,
+    dailyStreak: 0,
+    weeklyStreak: 0,
   });
 
   const values: AuthContextType = {
