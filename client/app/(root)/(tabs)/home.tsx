@@ -59,8 +59,6 @@ const Home = () => {
     };
 
     getQuests();
-    console.log("questlist: ", questList)
-
   }, []);
 
   return (

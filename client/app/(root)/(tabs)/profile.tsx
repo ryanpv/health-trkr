@@ -51,12 +51,12 @@ const Profile = () => {
   }, []);
 
   return (
-    <ScrollView className="bg-blue-400 h-screen p-5 flex items-center">
+    <SafeAreaView className="bg-blue-400 h-screen p-5 flex items-center">
       <SafeAreaView>
         <ActivityIndicator style={ styles.loadingOverlay } size="large" color="#0000ff" animating={ loading } />
       </SafeAreaView>
 
-      <View className="flex max-w-xl w-full p-5">
+      <ScrollView className="flex max-w-xl w-full p-5 border-2">
         <View className="flex flex-row items-end gap-x-5">
           <View>
             <Image source={ icons.profile } />
@@ -75,12 +75,12 @@ const Profile = () => {
 
         <View className="flex flex-row gap-x-3 justify-center my-5">
           <View className="flex-1 rounded-md p-3 bg-blue-200 items-center justify-center shadow shadow-xl">
-            <Text className="text-blue-400 font-bold">80</Text>
+            <Text className="text-blue-400 font-bold">{ currentUser.dailyStreak }</Text>
             <Text className="font-semibold text-gray-400 text-md text-center">Daily Streak</Text>
           </View>
 
           <View className="flex-1 rounded-md p-3 bg-blue-200 items-center justify-center shadow shadow-xl">
-            <Text className="text-blue-400 font-bold l">11</Text>
+            <Text className="text-blue-400 font-bold l">{ currentUser.weeklyStreak }</Text>
             <Text className="font-semibold text-gray-400 text-md text-center">Weekly Streak</Text>
           </View>
         </View>
@@ -129,8 +129,8 @@ const Profile = () => {
           />
         </View>
 
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 

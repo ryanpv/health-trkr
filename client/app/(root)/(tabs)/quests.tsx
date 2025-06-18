@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { fetchQuests } from "@/app/utils/api";
 import { getUserAccessToken } from "@/app/utils/getAccessToken";
 import { useAuthContext } from "@/app/contexts/context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const Quests = () => {
@@ -32,10 +33,10 @@ const Quests = () => {
   },[])
 
   return (
-    <ScrollView className="bg-blue-400 min-h-screen pb-20 p-5 flex items-center">
-      <View className="flex max-w-xl w-full p-5">
+    <SafeAreaView className="bg-blue-400 min-h-screen pb-20 p-5 flex items-center">
+      <ScrollView className="flex max-w-xl w-full p-5">
         <View className="flex flex-row justify-between my-10">
-          <Text className="text-2xl font-semibold text-gray-800">Total Points: { currentUser.totalPoints }</Text>
+          <Text className="font-semibold text-white text-xl">Total Points: { currentUser.totalPoints }</Text>
           {/* <Text className="text-2xl font-semibold text-gray-800">Credits: 000</Text> */}
         </View>
 
@@ -95,8 +96,8 @@ const Quests = () => {
             : null
           }
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
