@@ -61,7 +61,12 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
           "Authorization": `Bearer ${ accessToken }`,
           "Content-type": "application/json"
           },
-          body: JSON.stringify({ id: questData.id, quest_status: "complete", points: questData.points })
+          body: JSON.stringify({ 
+            id: questData.id, 
+            quest_type: questData.quest_type,
+            quest_status: "complete", 
+            points: questData.points 
+          })
       });
 
       console.log("COMPLETED QUEST RESULT: ", response)
