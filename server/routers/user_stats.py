@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from auth.get_user_id import get_cached_uid
 from auth.verify_token_and_email import verify_token_and_email
@@ -45,43 +46,51 @@ async def post_user_stats(
       print(f"QUEST ROW: {update_quest_row}")
 
       # Update user stats
-      curr_time = datetime.now()
-
       check_stats = await session.execute(select(UserStats).where(UserStats.user_id == user_id)) # type: ignore
       user_stats = check_stats.scalar_one_or_none()
 
+      curr_date = datetime.now(timezone.utc)
+      server_timezone = ZoneInfo("America/Toronto")
+      
       if not user_stats:
         new_stats = UserStats(
           user_id=user_id,
           total_points=points_to_add,
           current_daily_streak=1,
-          last_daily_completed=curr_time,
+          last_daily_completed=curr_date,
           current_weekly_streak=1,
-          last_weekly_completed=curr_time
+          last_weekly_completed=curr_date
         )
         session.add(new_stats)
       else:
+        # Add points from completed quests
         user_stats.total_points += points_to_add
-
+      
         # Daily streak update
-        if user_stats.last_daily_completed and user_stats.last_daily_completed >= curr_time - timedelta(days=1):
-          user_stats.current_daily_streak += 1
-        else:
+        if (
+          user_stats.last_daily_completed 
+          and (user_stats.last_daily_completed + timedelta(days=1)).date() < curr_date.astimezone(server_timezone).date()
+        ):
+          print('*** STREAK IS BROKEN.')
           user_stats.current_daily_streak = 1
-        
-        user_stats.last_daily_completed = curr_time
+        elif (
+          user_stats.last_daily_completed
+          and user_stats.last_daily_completed.date() == curr_date.date()
+        ):
+          print("*** DAILY ALREADY COMPLETED.")
+        else:
+          print("*** STREAK CONTINUES.")
+          user_stats.current_daily_streak += 1
+
+        user_stats.last_daily_completed = curr_date.astimezone(server_timezone)
 
         # Weekly streak update
-        if user_stats.last_weekly_completed and user_stats.last_weekly_completed >= curr_time - timedelta(days=7):
-          user_stats.current_weekly_streak += 1
-        else:
-          user_stats.current_weekly_streak = 1
-
-        user_stats.last_weekly_completed = curr_time
 
         session.add(user_stats)
-
     return {"message": f"Successfully added {payload} points."}
   except Exception as e:
     print(f"Error receiving user stats: {e}")
-    return { "message": "Error receiving stats"}
+    raise HTTPException(
+      status_code=500, detail="Error receiving stats"
+    )
+
