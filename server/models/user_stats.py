@@ -5,16 +5,17 @@ from sqlmodel import Field, SQLModel
 
 
 class UserStats(SQLModel, table=True): # type: ignore
+    __tablename__ = "user_stats" 
     id: int = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="users.id")
     total_points: int
     current_daily_streak: int
     last_daily_completed: datetime = Field(
-        sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+        sa_column=Column(DateTime(timezone=True), server_default=text("CURRENT_TIMESTAMP"))
     )
     current_weekly_streak: int
     last_weekly_completed: datetime = Field(
-        sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+        sa_column=Column(DateTime(timezone=True), server_default=text("CURRENT_TIMESTAMP"))
     )
 
 # class UserStatsUpdate(UserStatsBase):
