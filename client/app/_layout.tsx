@@ -12,6 +12,7 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { AuthProvider } from './contexts/context';
 import { StateProvider } from './contexts/stateContext';
+import Toast from 'react-native-toast-message'; // For notifications in-app
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -47,6 +48,7 @@ export default function RootLayout() {
 
 
   return (
+    <>
     <AuthProvider>
       <StateProvider>
         <Stack>
@@ -57,5 +59,8 @@ export default function RootLayout() {
         </Stack>
       </StateProvider>
     </AuthProvider>
+    
+    <Toast />
+    </>
   );
 }
