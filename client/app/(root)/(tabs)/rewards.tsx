@@ -9,12 +9,14 @@ import AddRewardModal from "@/app/components/rewards/createReward";
 import { useStateContext } from "@/app/contexts/stateContext";
 import { fetchRewards } from "@/app/utils/api";
 import { getUserAccessToken } from "@/app/utils/getAccessToken";
+import { useAuthContext } from "@/app/contexts/context";
 
 const Rewards = () => {
   const [loading, setLoading] =  useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [rewardModalData, setRewardModalData] = useState<{ title: string, id: number, points_cost: number }>({ title: "", id: 0, points_cost: 0 });
   const { rewardList, setRewardList } = useStateContext();
+  const { currentUser } = useAuthContext();
   
 
   useEffect(() => {
@@ -46,7 +48,7 @@ const Rewards = () => {
 
         <View className="my-5 p-5 h-20 rounded-md shadow-lg bg-blue-200">
           <Text className="font-semibold">
-            Total rewards points:
+            Total rewards points: { currentUser.totalPoints }
           </Text>
 
         </View>
@@ -62,7 +64,8 @@ const Rewards = () => {
               rewardList.map((reward) => (
                 <View>
                   <RewardButton 
-                    title={reward.title} 
+                    title={ reward.title } 
+                    points={ currentUser.totalPoints }
                     onPress={ () => {
                       setRewardModalData({
                         title: reward.title,
