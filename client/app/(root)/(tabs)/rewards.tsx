@@ -6,10 +6,10 @@ import RewardModal from "@/app/components/rewards/rewardModal";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import AddRewardModal from "@/app/components/rewards/createReward";
-import { useStateContext } from "@/app/contexts/stateContext";
+import { useStateContext } from "@/contexts/stateContext";
 import { fetchRewards } from "@/utils/api";
 import { getUserAccessToken } from "@/utils/getAccessToken";
-import { useAuthContext } from "@/app/contexts/context";
+import { useAuthContext } from "@/contexts/context";
 
 const Rewards = () => {
   const [loading, setLoading] =  useState(false);

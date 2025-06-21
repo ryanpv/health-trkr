@@ -8,7 +8,7 @@ import { getUserCredentials } from "@/utils/getCredentials";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { fetchQuests } from "@/utils/api";
 
-import { useStateContext } from "@/app/contexts/stateContext";
+import { useStateContext } from "@/contexts/stateContext";
 
 type AddQuestModalProps = {
 }

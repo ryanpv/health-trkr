@@ -13,7 +13,7 @@ import { useForm, Controller } from "react-hook-form";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { icons } from "@/constants";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { useStateContext } from "@/app/contexts/stateContext";
+import { useStateContext } from "@/contexts/stateContext";
 import { fetchRewards } from "@/utils/api";
 
 type RewardsFormData = {

@@ -10,7 +10,7 @@ import { useRouter } from "expo-router";
 // Firebase auth imports
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useAuthContext } from "../contexts/context";
+import { useAuthContext } from "../../contexts/context";
 
 
 type FormData = {

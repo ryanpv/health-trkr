@@ -1,10 +1,10 @@
 import { View, Text, ScrollView } from "react-native"
 import QuestButton from "@/app/components/quests/questButton";
-import { useStateContext } from "@/app/contexts/stateContext";
+import { useStateContext } from "@/contexts/stateContext";
 import React, { useState } from "react";
 import { fetchQuests } from "@/utils/api";
 import { getUserAccessToken } from "@/utils/getAccessToken";
-import { useAuthContext } from "@/app/contexts/context";
+import { useAuthContext } from "@/contexts/context";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 

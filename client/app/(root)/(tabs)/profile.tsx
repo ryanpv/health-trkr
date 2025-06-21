@@ -21,7 +21,7 @@ import { logout } from "@/utils/logout";
 // Constants
 import { icons } from "@/constants"; // Icon assets
 import { deleteCredentials } from "@/utils/deleteCredentials";
-import { useAuthContext } from "@/app/contexts/context";
+import { useAuthContext } from "@/contexts/context";
 
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false);

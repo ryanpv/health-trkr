@@ -3,7 +3,7 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signOut } from "firebase/auth";
 import { deleteCredentials } from "@/utils/deleteCredentials";
 import { User } from "@/app/types/state.types";
-import { useAuthContext } from "@/app/contexts/context";
+import { useAuthContext } from "@/contexts/context";
 
 export const logout = async(
   setLoading: Dispatch<SetStateAction<boolean>>, 

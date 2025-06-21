@@ -8,10 +8,10 @@ import AddQuestModal from "@/app/components/quests/create";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { fetchQuests } from "@/utils/api"
 import { getUserAccessToken } from "@/utils/getAccessToken";
-import { useStateContext } from "@/app/contexts/stateContext";
+import { useStateContext } from "@/contexts/stateContext";
 
 import QuestModal from "@/app/components/quests/questModal";
-import { useAuthContext } from "@/app/contexts/context";
+import { useAuthContext } from "@/contexts/context";
 
 
 type QuestData = {

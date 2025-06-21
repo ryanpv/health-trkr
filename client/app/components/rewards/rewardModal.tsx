@@ -1,5 +1,5 @@
-import { useAuthContext } from "@/app/contexts/context";
-import { useStateContext } from "@/app/contexts/stateContext";
+import { useAuthContext } from "@/contexts/context";
+import { useStateContext } from "@/contexts/stateContext";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { useState } from "react";
 import { Modal, View, Text, TouchableOpacity } from "react-native";
