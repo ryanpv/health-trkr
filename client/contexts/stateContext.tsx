@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, Dispatch, SetStateAction } 
 import { 
   Quest, 
   Reward, 
-} from "@/app/types/state.types"
+} from "@/types/state.types"
 
 
 interface ContextType {

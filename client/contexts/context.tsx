@@ -1,7 +1,7 @@
 import { Children, createContext, useContext, useState, Dispatch, SetStateAction } from "react";
 
 // State types imports
-import { User } from "@/app/types/state.types";
+import { User } from "@/types/state.types";
 
 interface AuthContextType {
   currentUser: User;

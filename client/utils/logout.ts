@@ -2,7 +2,7 @@ import { useState, Dispatch, SetStateAction } from "react";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signOut } from "firebase/auth";
 import { deleteCredentials } from "@/utils/deleteCredentials";
-import { User } from "@/app/types/state.types";
+import { User } from "@/types/state.types";
 import { useAuthContext } from "@/contexts/context";
 
 export const logout = async(
