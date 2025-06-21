@@ -51,7 +51,7 @@ async def post_user_stats(
 
       curr_date = datetime.now(timezone.utc)
       server_timezone = ZoneInfo("America/Toronto")
-      
+
       if not user_stats:
         new_stats = UserStats(
           user_id=user_id,
@@ -71,21 +71,27 @@ async def post_user_stats(
           user_stats.last_daily_completed 
           and (user_stats.last_daily_completed + timedelta(days=1)).date() < curr_date.astimezone(server_timezone).date()
         ):
-          print('*** STREAK IS BROKEN.')
+          print('*** DAILY STREAK IS BROKEN.')
           user_stats.current_daily_streak = 1
         elif (
           user_stats.last_daily_completed
-          and user_stats.last_daily_completed.date() == curr_date.date()
+          and user_stats.last_daily_completed.date() == curr_date.astimezone(server_timezone).date()
         ):
           print("*** DAILY ALREADY COMPLETED.")
         else:
-          print("*** STREAK CONTINUES.")
+          print("*** DAILY STREAK CONTINUES.")
           user_stats.current_daily_streak += 1
 
         user_stats.last_daily_completed = curr_date.astimezone(server_timezone)
 
         # Weekly streak update
-
+        if user_stats.current_daily_streak > 7:
+          user_stats.current_weekly_streak = user_stats.current_daily_streak // 7
+          print("*** WEEKLY STREAK CONTINUES")
+        else:
+          user_stats.current_weekly_streak = 1
+          print("*** WEEKLY STREAK STARTING")
+           
         session.add(user_stats)
     return {"message": f"Successfully added {payload} points."}
   except Exception as e:
