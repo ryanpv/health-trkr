@@ -4,9 +4,9 @@ import { icons } from '@/constants';
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { Dropdown } from 'react-native-element-dropdown';
 import Icon from "react-native-vector-icons/FontAwesome";
-import { getUserCredentials } from "@/app/utils/getCredentials";
+import { getUserCredentials } from "@/utils/getCredentials";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { fetchQuests } from "@/app/utils/api";
+import { fetchQuests } from "@/utils/api";
 
 import { useStateContext } from "@/app/contexts/stateContext";
 
@@ -136,7 +136,7 @@ const AddQuestModal: React.FC<AddQuestModalProps> = () => {
                     value={value}
                     placeholder="Quest type..."
                     placeholderStyle={styles.placeHolder}
-                    onChange={item => onChange(item.value)}
+                    onChange={ item => onChange(item.value) }
                   />
                 )}
               />

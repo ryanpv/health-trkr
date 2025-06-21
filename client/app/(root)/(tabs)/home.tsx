@@ -6,8 +6,8 @@ import { icons } from '@/constants';
 import QuestButton from "@/app/components/quests/questButton";
 import AddQuestModal from "@/app/components/quests/create";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { fetchQuests } from "@/app/utils/api";
-import { getUserAccessToken } from "@/app/utils/getAccessToken";
+import { fetchQuests } from "@/utils/api"
+import { getUserAccessToken } from "@/utils/getAccessToken";
 import { useStateContext } from "@/app/contexts/stateContext";
 
 import QuestModal from "@/app/components/quests/questModal";

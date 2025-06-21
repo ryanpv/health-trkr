@@ -7,8 +7,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AddRewardModal from "@/app/components/rewards/createReward";
 import { useStateContext } from "@/app/contexts/stateContext";
-import { fetchRewards } from "@/app/utils/api";
-import { getUserAccessToken } from "@/app/utils/getAccessToken";
+import { fetchRewards } from "@/utils/api";
+import { getUserAccessToken } from "@/utils/getAccessToken";
 import { useAuthContext } from "@/app/contexts/context";
 
 const Rewards = () => {

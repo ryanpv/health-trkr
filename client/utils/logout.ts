@@ -1,7 +1,7 @@
 import { useState, Dispatch, SetStateAction } from "react";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signOut } from "firebase/auth";
-import { deleteCredentials } from "@/app/utils/deleteCredentials";
+import { deleteCredentials } from "@/utils/deleteCredentials";
 import { User } from "@/app/types/state.types";
 import { useAuthContext } from "@/app/contexts/context";
 
@@ -33,7 +33,9 @@ export const logout = async(
     setCurrentUser({
       email: '',
       displayName: '',
-      totalPoints: 0
+      totalPoints: 0,
+      dailyStreak: 0,
+      weeklyStreak: 0,
     });
     setModalVisible(false);
     console.log("User logged out: ", userSignOut);

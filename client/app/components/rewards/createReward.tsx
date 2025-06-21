@@ -14,7 +14,7 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { icons } from "@/constants";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useStateContext } from "@/app/contexts/stateContext";
-import { fetchRewards } from "@/app/utils/api";
+import { fetchRewards } from "@/utils/api";
 
 type RewardsFormData = {
   rewardTitle: string;
@@ -53,11 +53,12 @@ const AddRewardModal: FC = () => {
         })
       });
 
-      if (response.ok) {
-        const rewards = await fetchRewards(accessToken);
-        setRewardList(rewardList);
-        reset();
-      }
+      console.log("Reward response: ", response)
+      // if (response.ok) {
+      //   const rewards = await fetchRewards(accessToken);
+      //   setRewardList(rewardList);
+      //   reset();
+      // }
     } catch (error) {
       console.log("ERROR adding new reward: ", error)
     } finally {

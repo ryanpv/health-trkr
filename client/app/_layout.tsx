@@ -55,7 +55,7 @@ export default function RootLayout() {
           <Stack.Screen name='index' options={{ headerShown: false }}/> {/* Direct to welcome page */}
           <Stack.Screen name='(auth)' options={{ headerShown: false }}/>
           <Stack.Screen name='(root)' options={{ headerShown: false }}/>
-          <Stack.Screen name='(quests)' options={{ headerShown: false }}/>
+          {/* <Stack.Screen name='(quests)' options={{ headerShown: false }}/> */}
         </Stack>
       </StateProvider>
     </AuthProvider>

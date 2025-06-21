@@ -15,12 +15,12 @@ import RouteLink from "@/app/components/routeLink"; // Navigation link component
 import LogoutModal from "@/app/components/logoutModal"; // Logout confirmation modal
 
 // Utils
-import { getUserCredentials } from "@/app/utils/getCredentials"; // Function to retrieve user credentials
-import { logout } from "@/app/utils/logout";
+import { getUserCredentials } from "@/utils/getCredentials"; // Function to retrieve user credentials
+import { logout } from "@/utils/logout";
 
 // Constants
 import { icons } from "@/constants"; // Icon assets
-import { deleteCredentials } from "@/app/utils/deleteCredentials";
+import { deleteCredentials } from "@/utils/deleteCredentials";
 import { useAuthContext } from "@/app/contexts/context";
 
 const Profile = () => {
