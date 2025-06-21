@@ -1,3 +1,4 @@
+import { useAuthContext } from "@/app/contexts/context";
 import { useStateContext } from "@/app/contexts/stateContext";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { useState } from "react";
@@ -19,6 +20,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ closeModal, modalVisible, rew
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
   const { setRewardList } = useStateContext();
+  const { setCurrentUser } = useAuthContext();
   const [loading, setLoading] = useState(false);
   
   const claimReward = async() => {
@@ -43,6 +45,10 @@ const RewardModal: React.FC<RewardModalProps> = ({ closeModal, modalVisible, rew
       if (!response.ok) throw new Error("Unable to claim reward at this time.");
 
       setRewardList((prev) => prev.filter(reward => reward.id !== rewardData.id));
+      setCurrentUser((prev) => ({
+        ...prev,
+        totalPoints: prev.totalPoints - rewardData.points_cost
+      }))
     } catch (error: unknown) {
       console.log("Error claiming reward: ", error)
     } finally {
