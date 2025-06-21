@@ -12,7 +12,7 @@ const WelcomeScreen = () => {
       <TouchableOpacity
         className="m-5 border border-2 flex flex-wrap rounded-full border-blue-500"
         onPress={ () => {
-          router.replace("../home");
+          router.replace("../home")
         } }
       >
         <Text className="px-5 py-3 text-center font-semibold text-orange-500 text-md underline">Continue</Text>
@@ -20,7 +20,7 @@ const WelcomeScreen = () => {
       <TouchableOpacity
         className="m-5 border border-2 flex flex-wrap rounded-full border-blue-500"
         onPress={ () => {
-          router.replace("./signup");
+          router.replace("./signup")
         } }
       >
         <Text className="px-5 py-3 text-center font-semibold text-orange-500 text-md underline">SIGNUP</Text>
