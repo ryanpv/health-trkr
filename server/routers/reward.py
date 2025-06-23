@@ -102,15 +102,22 @@ async def update_rewards(
 
       # Update user stats table if reward is redeemed
       if reward_data.status == "redeemed":
+        if not reward_data.points_cost:
+          raise HTTPException(status_code=400, detail="Reward points_cost is required for redemption.")
+
+        # Fetch user stats
         check_user_stats = await session.execute(select(UserStats).where(UserStats.user_id == user_id)) # type: ignore
         user_stats = check_user_stats.scalar_one_or_none()
 
-        if user_stats is not None and reward_data.points_cost:
-          user_stats.total_points -= reward_data.points_cost
-        else:
-          logger.error("User stats does not exist or no rewards points cost provided.")
-          raise HTTPException(status_code=400, detail="No user stats found or no reward points cost provided.")
-      
+        if not user_stats:
+          logger.error(f"User stats not found for user_id: {user_id}")
+          raise HTTPException(status_code=404, detail="User status not found.")
+        
+        if user_stats.total_points < reward_data.points_cost:
+          logger.warning(f"User {user_id} has insufficient points.")
+          raise HTTPException(status_code=400, detail="You do not have enough points to redeem.")
+        
+        user_stats.total_points -= reward_data.points_cost
         session.add(user_stats)
 
       return {"message", f"Successfully redeemed reward: {reward_data.id}"}
