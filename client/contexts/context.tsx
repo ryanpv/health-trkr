@@ -2,6 +2,7 @@ import { Children, createContext, useContext, useState, Dispatch, SetStateAction
 
 // State types imports
 import { User } from "@/types/state.types";
+import Toast from "react-native-toast-message";
 
 interface AuthContextType {
   currentUser: User;
@@ -40,7 +41,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   return (
     <AuthContext.Provider value={ values }>
-      { children }
+      <>
+        { children }
+        <Toast />
+      </>
     </AuthContext.Provider>
   )
 };
