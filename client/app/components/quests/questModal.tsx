@@ -2,6 +2,7 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { useState } from "react";
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native"
 import { useStateContext } from "@/contexts/stateContext";
+import { useAuthContext } from "@/contexts/context";
 
 type QuestModalProps = {
   closeModal: () => void;
@@ -22,6 +23,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
   const { questList, setQuestList } = useStateContext();
+  const { setCurrentUser } = useAuthContext();
 
   const deleteQuest = async() => {
     try {
@@ -73,8 +75,13 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
 
       if (!response.ok) throw new Error("Quest cannot be completed at this time.")
         
-      // Update quest list
+      // Update quest list and user total points
       setQuestList((prev) => prev.filter(quest => quest.id !== questData.id));
+      setCurrentUser((prev) => ({
+        ...prev,
+        totalPoints: prev.totalPoints += questData.points
+      }));
+      
       closeModal();
     } catch (error: unknown) {
       console.log("Error completing quest: ", error)
