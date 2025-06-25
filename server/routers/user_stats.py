@@ -33,6 +33,9 @@ async def post_user_stats(
       if not quest:
         raise HTTPException(status_code=404, detail="Unable to find quest.")
       
+      if quest.quest_status == 'complete':
+        raise HTTPException(status_code=400, detail="Quest has already been completed.")
+      
       update_quest_row = payload.dict(exclude_unset=True)
       points_to_add = update_quest_row.pop("points", 0)
 
