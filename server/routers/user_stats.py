@@ -22,6 +22,8 @@ async def post_user_stats(
   try:
     print(f"***points: {payload}")
     user_id = await get_cached_uid(firebase_uid=uid)
+    curr_date = datetime.now(timezone.utc)
+    server_timezone = ZoneInfo("America/Toronto")
 
     async with session.begin():
       # Update quest status
@@ -39,6 +41,9 @@ async def post_user_stats(
       update_quest_row = payload.dict(exclude_unset=True)
       points_to_add = update_quest_row.pop("points", 0)
 
+      if update_quest_row.get("quest_status") == "complete":
+        update_quest_row["completed_at"] = curr_date.astimezone(server_timezone)
+
       if update_quest_row:
         await session.execute(
           update(Quest)
@@ -52,8 +57,6 @@ async def post_user_stats(
       check_stats = await session.execute(select(UserStats).where(UserStats.user_id == user_id)) # type: ignore
       user_stats = check_stats.scalar_one_or_none()
 
-      curr_date = datetime.now(timezone.utc)
-      server_timezone = ZoneInfo("America/Toronto")
 
       if not user_stats:
         new_stats = UserStats(
