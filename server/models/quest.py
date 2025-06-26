@@ -17,6 +17,7 @@ class Quest(QuestBase, table=True): #type: ignore
         default=None,
         sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP")),
     )
+    completed_at: Optional[datetime]
     user_id: int = Field(foreign_key="users.id")
 
 
