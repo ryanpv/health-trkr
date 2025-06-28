@@ -1,7 +1,8 @@
 export type Quest = {
-  date: string,
-  id: number | null,
+  title: string,
+  id: number,
   quest_status: string,
   quest_type: string,
-  title: string
+  date: string,
+  points: number
 };
