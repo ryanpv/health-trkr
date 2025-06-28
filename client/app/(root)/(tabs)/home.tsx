@@ -13,16 +13,7 @@ import { useStateContext } from "@/contexts/stateContext";
 import QuestModal from "@/app/components/quests/questModal";
 import { useAuthContext } from "@/contexts/context";
 import ConfirmModal from "@/app/components/confirmModal";
-
-
-type QuestData = {
-  title: string,
-  id: number,
-  quest_status: string,
-  quest_type: string,
-  date: string,
-  points: number
-}
+import { Quest } from "@/types/quest.types";
 
 
 const Home = () => {
@@ -32,7 +23,7 @@ const Home = () => {
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const { questList, setQuestList } = useStateContext();
   const { currentUser } =  useAuthContext();
-  const [questModalData, setQuestModalData] = useState<QuestData>({
+  const [questModalData, setQuestModalData] = useState<Quest>({
     title: '',
     id: 0,
     quest_status: '',
