@@ -5,53 +5,23 @@ import { useStateContext } from "@/contexts/stateContext";
 import { useAuthContext } from "@/contexts/context";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ConfirmModal from "@/app/components/confirmModal";
+import { Quest } from "@/types/quest.types";
 
 
 type QuestModalProps = {
   closeModal: () => void;
+  openConfirmModal: () => void;
   modalVisible: boolean;
-  questData: QuestData
+  questData: Quest
 };
 
-type QuestData = {
-  title: string,
-  id: number,
-  quest_status: string,
-  quest_type: string,
-  date: string,
-  points: number
-}
 
-const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, questData }) => {
+const QuestModal: React.FC<QuestModalProps> = ({ closeModal, openConfirmModal, modalVisible, questData }) => {
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
   const { questList, setQuestList } = useStateContext();
   const { setCurrentUser } = useAuthContext();
-  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
-  const deleteQuest = async() => {
-    try {
-      if (!credentials){
-        throw new Error("No valid credentials. Please log in.")
-      }
-
-      const accessToken = await credentials.getIdToken();
-      const response = await fetch(`${ serverUrl }/quests/${ questData.id }`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${ accessToken }`,
-          "Content-type": "application/json"
-        }
-      });
-
-      if (!response.ok) throw new Error("Unable to complete DELETE request for quest")
-
-      setQuestList((prev) => prev.filter(quest => quest.id !== questData.id));
-      closeModal();
-    } catch (error: unknown) {
-      console.log("Error: ", error)
-    }
-  };
 
   const completeQuest = async() => {
     try {
@@ -119,7 +89,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
             <TouchableOpacity
               onPress={ () => {
                 closeModal()
-                setConfirmModalVisible(true)
+                openConfirmModal()
               } }
             >
               <View className="flex-1 rounded-md bg-gray-400 p-2 items-center justify-center shadow-xl w-24">
@@ -137,12 +107,12 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
           </View>
         </View>
       </Modal>
-      <ConfirmModal 
+      {/* <ConfirmModal 
         data={{ title: questData.title, id: questData.id }} 
         confirmFunction={ deleteQuest } 
         closeModal={ () => setConfirmModalVisible(false) }
         modalVisible={ confirmModalVisible }
-      />
+      /> */}
     </View>
   )
 };
