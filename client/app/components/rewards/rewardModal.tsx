@@ -2,7 +2,7 @@ import { useAuthContext } from "@/contexts/context";
 import { useStateContext } from "@/contexts/stateContext";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { useState } from "react";
-import { Modal, View, Text, TouchableOpacity } from "react-native";
+import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 
 type RewardModalProps = {
   closeModal: () => void;
@@ -62,7 +62,6 @@ const RewardModal: React.FC<RewardModalProps> = ({ closeModal, modalVisible, rew
   };
 
 
-
   return(
     <View>
       <Modal
@@ -70,26 +69,32 @@ const RewardModal: React.FC<RewardModalProps> = ({ closeModal, modalVisible, rew
        animationType="slide"
        transparent={ true }
       >
-        <View className="bg-blue-500 flex items-center justify-center m-auto p-5 rounded-md max-w-sm w-full shadow-xl">
-          <Text className="font-semibold text-xl text-white">{ rewardData.title }</Text>
-          <View className="flex flex-row gap-x-5 justify-center my-5">
-            <TouchableOpacity
-              onPress={ claimReward }
-            >
-              <View className="flex-1 rounded-md bg-green-400 p-2 items-center justify-center shadow-xl w-24">
-                <Text className="text-white font-semibold text-lg">Claim</Text>
+        <TouchableWithoutFeedback onPress={ closeModal }>
+          <View className="flex-1 justify-center items-center">
+            <TouchableWithoutFeedback>
+              <View className="bg-blue-500 flex items-center justify-center m-auto p-5 rounded-md max-w-sm w-full shadow-xl">
+                <Text className="font-semibold text-xl text-white">{ rewardData.title }</Text>
+                <View className="flex flex-row gap-x-5 justify-center my-5">
+                  <TouchableOpacity
+                    onPress={ claimReward }
+                  >
+                    <View className="flex-1 rounded-md bg-green-400 p-2 items-center justify-center shadow-xl w-24">
+                      <Text className="text-white font-semibold text-lg">Claim</Text>
+                    </View>
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity
+                    onPress={ closeModal }
+                    >
+                    <View className="flex-1 rounded-md bg-blue-200 p-2 items-center justify-center w-24">
+                        <Text className="font-semibold text-gray-500 text-lg">Postpone</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              onPress={ closeModal }
-              >
-              <View className="flex-1 rounded-md bg-blue-200 p-2 items-center justify-center w-24">
-                  <Text className="font-semibold text-gray-500 text-lg">Postpone</Text>
-              </View>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   )
