@@ -4,6 +4,7 @@ import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "r
 import { useStateContext } from "@/contexts/stateContext";
 import { useAuthContext } from "@/contexts/context";
 import Icon from "react-native-vector-icons/FontAwesome";
+import ConfirmModal from "@/app/components/confirmModal";
 
 
 type QuestModalProps = {
@@ -26,6 +27,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
   const credentials = FIREBASE_AUTH.currentUser;
   const { questList, setQuestList } = useStateContext();
   const { setCurrentUser } = useAuthContext();
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
   const deleteQuest = async() => {
     try {
@@ -115,7 +117,10 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
 
           <View className="flex flex-row gap-x-5 justify-center my-5">
             <TouchableOpacity
-              onPress={ deleteQuest }
+              onPress={ () => {
+                closeModal()
+                setConfirmModalVisible(true)
+              } }
             >
               <View className="flex-1 rounded-md bg-gray-400 p-2 items-center justify-center shadow-xl w-24">
                 <Text className="text-white font-semibold text-lg">Delete</Text>
@@ -132,6 +137,12 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
           </View>
         </View>
       </Modal>
+      <ConfirmModal 
+        data={{ title: questData.title, id: questData.id }} 
+        confirmFunction={ deleteQuest } 
+        closeModal={ () => setConfirmModalVisible(false) }
+        modalVisible={ confirmModalVisible }
+      />
     </View>
   )
 };
