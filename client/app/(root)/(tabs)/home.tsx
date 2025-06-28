@@ -12,6 +12,7 @@ import { useStateContext } from "@/contexts/stateContext";
 
 import QuestModal from "@/app/components/quests/questModal";
 import { useAuthContext } from "@/contexts/context";
+import ConfirmModal from "@/app/components/confirmModal";
 
 
 type QuestData = {
@@ -28,6 +29,7 @@ const Home = () => {
   const [dailyGoalCount, setDailyGoalCount] = useState<number>(2);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const { questList, setQuestList } = useStateContext();
   const { currentUser } =  useAuthContext();
   const [questModalData, setQuestModalData] = useState<QuestData>({
@@ -39,8 +41,8 @@ const Home = () => {
     points: 0
   });
   
-  // const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
-  // const credentials = FIREBASE_AUTH.currentUser;
+  const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
+  const credentials = FIREBASE_AUTH.currentUser;
 
   
   useEffect(() => {
@@ -50,7 +52,7 @@ const Home = () => {
         const accessToken = await getUserAccessToken();
         const fetchQuestList = await fetchQuests(accessToken);
         setQuestList(fetchQuestList);
-        console.log("getQuests: ", fetchQuestList.length)
+        console.log("getQuests: ", fetchQuestList)
       } catch (error) {
         console.log("Error fetching quests: ", error)
       } finally {
@@ -60,6 +62,30 @@ const Home = () => {
 
     getQuests();
   }, []);
+    
+  
+  const deleteQuest = async(questId: number) => {
+    try {
+      if (!credentials){
+        throw new Error("No valid credentials. Please log in.")
+      }
+
+      const accessToken = await credentials.getIdToken();
+      const response = await fetch(`${ serverUrl }/quests/${ questId }`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${ accessToken }`,
+          "Content-type": "application/json"
+        }
+      });
+
+      if (!response.ok) throw new Error("Unable to complete DELETE request for quest")
+
+      setQuestList((prev) => prev.filter(quest => quest.id !== questId));
+    } catch (error: unknown) {
+      console.log("Error: ", error)
+    }
+  };
 
   return (
     <SafeAreaView className="bg-blue-400 h-screen flex items-center p-5">
@@ -124,7 +150,20 @@ const Home = () => {
         </ScrollView>
 
         <View>
-          <QuestModal closeModal={ () => setModalVisible(false) } modalVisible={ modalVisible } questData={ questModalData } />
+          <QuestModal 
+            closeModal={ () => setModalVisible(false) } 
+            openConfirmModal={ () => setConfirmModalVisible(true) }
+            modalVisible={ modalVisible } 
+            questData={ questModalData } />
+        </View>
+
+        <View>
+          <ConfirmModal 
+            data={{ title: questModalData.title, id: questModalData.id }} 
+            confirmFunction={ () => deleteQuest(questModalData.id) } 
+            closeModal={ () => setConfirmModalVisible(false) }
+            modalVisible={ confirmModalVisible }
+          />
         </View>
 
         <View>
