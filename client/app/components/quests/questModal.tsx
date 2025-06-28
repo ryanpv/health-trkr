@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native"
 import { useStateContext } from "@/contexts/stateContext";
 import { useAuthContext } from "@/contexts/context";
+import Icon from "react-native-vector-icons/FontAwesome";
+
 
 type QuestModalProps = {
   closeModal: () => void;
@@ -32,7 +34,6 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
       }
 
       const accessToken = await credentials.getIdToken();
-
       const response = await fetch(`${ serverUrl }/quests/${ questData.id }`, {
         method: "DELETE",
         headers: {
@@ -101,13 +102,23 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
        transparent={ true }
       >
         <View className="bg-blue-500 flex items-center justify-center m-auto p-5 rounded-md max-w-sm w-full shadow-xl">
-          <Text className="font-semibold text-xl text-white">{ questData.title }</Text>
+          <View className="flex-row justify-center items-center w-full">
+            <Text className="font-semibold text-xl text-white">{ questData.title }</Text>
+            <View className="absolute right-0 ">
+              <TouchableOpacity
+                onPress={ closeModal }
+                >
+                <Icon name="close" size={ 20 } color={ "red" } />
+              </TouchableOpacity>
+            </View>
+          </View>
+
           <View className="flex flex-row gap-x-5 justify-center my-5">
             <TouchableOpacity
               onPress={ deleteQuest }
             >
               <View className="flex-1 rounded-md bg-gray-400 p-2 items-center justify-center shadow-xl w-24">
-                <Text className="text-white font-semibold text-lg">Skip</Text>
+                <Text className="text-white font-semibold text-lg">Delete</Text>
               </View>
             </TouchableOpacity>
 
@@ -116,14 +127,6 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, modalVisible, quest
             >
               <View className="flex-1 rounded-md bg-green-400 p-2 items-center justify-center shadow-xl w-24">
                 <Text className="text-white font-semibold text-lg">Complete</Text>
-              </View>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              onPress={ closeModal }
-              >
-              <View className="flex-1 rounded-md bg-blue-200 p-2 items-center justify-center w-24">
-                  <Text className="font-semibold text-gray-500 text-lg">Postpone</Text>
               </View>
             </TouchableOpacity>
           </View>
