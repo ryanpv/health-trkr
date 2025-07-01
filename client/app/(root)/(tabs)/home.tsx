@@ -43,17 +43,14 @@ const Home = () => {
         const accessToken = await getUserAccessToken();
         const fetchQuestList = await fetchQuests(accessToken);
         setQuestList(fetchQuestList);
-        console.log("getQuests: ", fetchQuestList)
       } catch (error) {
         console.log("Error fetching quests: ", error)
       } finally {
         setLoading(false);
       }
     };
-
     getQuests();
-  }, []);
-    
+  }, []);  
   
   const deleteQuest = async(questId: number) => {
     try {
@@ -79,14 +76,14 @@ const Home = () => {
   };
 
   return (
-    <SafeAreaView className="bg-blue-400 h-screen flex items-center p-5">
+    <SafeAreaView className="bg-gray-100 h-screen flex items-center p-5">
       <View className="flex max-w-xl w-full p-5">
         <View className="my-5 flex flex-row">
           <View className="flex-1 gap-y-2">
-            <Text className="font-semibold text-white">
+            <Text className="font-semibold text-blue-500">
               Welcome back,{" "}
             </Text>
-            <Text className="font-semibold text-lg text-white">
+            <Text className="font-semibold text-lg text-blue-500">
               { currentUser.displayName }
             </Text>
           </View>
@@ -97,6 +94,7 @@ const Home = () => {
               style={{
                 width: 30,
                 height: 30,
+                tintColor: "lightblue"
               }}
               resizeMode="contain"
             />

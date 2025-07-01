@@ -101,6 +101,7 @@ const AddRewardModal: FC = () => {
                     onChangeText={ onChange }
                     value={ value }
                     style={ styles.input }
+                    maxLength={50}
                   />
                 )}
               />

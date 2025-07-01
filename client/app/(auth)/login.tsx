@@ -58,6 +58,7 @@ const Login = () => {
         if (!response.ok) throw new Error("Unable to retrieve user info.");
 
         const userData = await response.json();
+        console.log("USER DATA: ", userData)
 
         await storeUserCredentials(user.uid || '');
         setCurrentUser(userData.data);

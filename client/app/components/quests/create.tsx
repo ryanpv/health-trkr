@@ -117,6 +117,7 @@ const AddQuestModal: React.FC<AddQuestModalProps> = () => {
                     onChangeText={onChange}
                     value={value}
                     style={styles.input}
+                    maxLength={50}
                   />
                 )}
               />
