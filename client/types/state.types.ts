@@ -19,4 +19,5 @@ export type User = {
   totalPoints: number;
   dailyStreak: number;
   weeklyStreak: number;
+  lastDailyBonus: string | null; 
 };

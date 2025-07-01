@@ -31,6 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     totalPoints: 0,
     dailyStreak: 0,
     weeklyStreak: 0,
+    lastDailyBonus: null
   });
 
   const values: AuthContextType = {

@@ -36,6 +36,7 @@ export const logout = async(
       totalPoints: 0,
       dailyStreak: 0,
       weeklyStreak: 0,
+      lastDailyBonus: null
     });
     setModalVisible(false);
     console.log("User logged out: ", userSignOut);
