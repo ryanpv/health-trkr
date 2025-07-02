@@ -15,9 +15,12 @@ class Quest(QuestBase, table=True): #type: ignore
     id: Optional[int] = Field(default=None, primary_key=True)
     date: Optional[datetime] = Field(
         default=None,
-        sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP")),
+        sa_column=Column(DateTime(timezone=True), server_default=text("CURRENT_TIMESTAMP")),
     )
-    completed_at: Optional[datetime]
+    completed_at: Optional[datetime] = Field(
+        default=None,
+        sa_column=Column(DateTime(timezone=True))
+    )
     user_id: int = Field(foreign_key="users.id")
 
 

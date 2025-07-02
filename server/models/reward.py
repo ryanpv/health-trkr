@@ -15,7 +15,7 @@ class Reward(RewardBase, table=True): # type: ignore
     id: int = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="users.id")
     date: datetime = Field(
-        sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+        sa_column=Column(DateTime(timezone=True), server_default=text("CURRENT_TIMESTAMP"))
     )
   
 class RewardCreate(RewardBase):
