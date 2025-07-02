@@ -1,3 +1,5 @@
+from typing import Optional
+
 from auth.get_user_id import get_cached_uid
 from auth.verify_token_and_email import verify_token_and_email
 from auth.verify_token_basic import verify_token_basic
@@ -20,17 +22,22 @@ router = APIRouter()
 # GET *INCOMPLETE* QUESTS
 @router.get("/quests", response_model=list[QuestResponse], status_code=200)
 async def get_quests(
+    status: Optional[str] = None,
     session: AsyncSession = Depends(get_session), uid: str = Depends(verify_token_and_email)
 ):
     try:
         user_id = await get_cached_uid(firebase_uid=uid)
 
-        result = await session.execute(
-            select(Quest).where(Quest.user_id == user_id, Quest.quest_status == "incomplete").order_by(asc(Quest.date)) # type: ignore
-        )
-        quests = result.scalars().all()
-        print(f"quests: {quests}")
-        return quests
+        if status:
+            result = await session.execute(
+                select(Quest).where(Quest.user_id == user_id, Quest.quest_status == status).order_by(asc(Quest.date)) # type: ignore
+            )
+            quests = result.scalars().all()
+            return quests
+        else:
+            result = await session.execute(select(Quest).where(Quest.user_id == user_id)) # type: ignore
+            quests = result.scalars().all()
+            return quests
     except Exception as e:
         print(f"Error fetching quests: {e}")
         raise HTTPException(
