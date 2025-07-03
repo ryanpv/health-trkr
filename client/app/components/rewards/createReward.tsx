@@ -53,12 +53,12 @@ const AddRewardModal: FC = () => {
         })
       });
 
-      console.log("Reward response: ", response)
-      // if (response.ok) {
-      //   const rewards = await fetchRewards(accessToken);
-      //   setRewardList(rewardList);
-      //   reset();
-      // }
+      // console.log("Reward response: ", response)
+      if (response.ok) {
+        const rewards = await fetchRewards(accessToken);
+        setRewardList(rewards);
+        reset();
+      }
     } catch (error) {
       console.log("ERROR adding new reward: ", error)
     } finally {
