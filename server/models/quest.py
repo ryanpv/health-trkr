@@ -46,6 +46,9 @@ class QuestResponse(SQLModel):
         sa_column=Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
     )
 
+class QuestCountResponse(SQLModel):
+    quests_completed_today: int
+
 class QuestUpdate(SQLModel):
     id: int
     title: Optional[str] = None
