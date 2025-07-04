@@ -34,22 +34,45 @@ const Home = () => {
   
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
+// get incomplete quests for this part
+  const getQuests = async () => {
+    setLoading(true);
+    try {
+      const accessToken = await getUserAccessToken();
+      const fetchQuestList = await fetchQuests(accessToken);
+      setQuestList(fetchQuestList);
+    } catch (error) {
+      console.log("Error fetching quests: ", error)
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const checkDailyCompleted = async () => {
+    setLoading(true);
+    try {
+      const accessToken = await getUserAccessToken();
+      const dailyCountFetch = await fetch(`${ serverUrl }/quests?status=complete&daily_check=true`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${ accessToken }`
+        }
+      });
+
+      if (dailyCountFetch.ok) {
+        const result = await dailyCountFetch.json()
+        setDailyGoalCount(result.quests_completed_today)
+      }
+    } catch (error) {
+      console.log("Error checking completed daily quests: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   useEffect(() => {
-    const getQuests = async () => {
-      setLoading(true);
-      try {
-        const accessToken = await getUserAccessToken();
-        const fetchQuestList = await fetchQuests(accessToken);
-        setQuestList(fetchQuestList);
-      } catch (error) {
-        console.log("Error fetching quests: ", error)
-      } finally {
-        setLoading(false);
-      }
-    };
     getQuests();
+    checkDailyCompleted();
   }, []);  
   
   const deleteQuest = async(questId: number) => {
@@ -103,7 +126,7 @@ const Home = () => {
 
         <View className="my-5 p-5 h-40 rounded-md shadow-lg bg-blue-200">
           <Text className="font-semibold">
-            {dailyGoalCount} / 5 Daily
+            {dailyGoalCount <= 5 ? dailyGoalCount : 5 } / 5 Daily
             goals completed
           </Text>
         </View>
