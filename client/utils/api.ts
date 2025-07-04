@@ -1,6 +1,6 @@
 export const fetchQuests = async(accessToken: string | undefined) => {
   try {
-    const response = await fetch(`${ process.env.EXPO_PUBLIC_DEV_SERVER }/quests`, {
+    const response = await fetch(`${ process.env.EXPO_PUBLIC_DEV_SERVER }/quests?status=incomplete`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${ accessToken }`      }
