@@ -30,25 +30,25 @@ const Profile = () => {
   const { currentUser } = useAuthContext();
   const router = useRouter();
 
-  useEffect(() => {
-    const userCreds = async () => {
-      const credentials = FIREBASE_AUTH.currentUser;
-      if (!credentials) {
-        console.log("User is not authenticated");
-        return;
-      };
-      const accessToken = await credentials.getIdToken();
+  // useEffect(() => {
+  //   const userCreds = async () => {
+  //     const credentials = FIREBASE_AUTH.currentUser;
+  //     if (!credentials) {
+  //       console.log("User is not authenticated");
+  //       return;
+  //     };
+  //     const accessToken = await credentials.getIdToken();
 
-      const tokenTest = await fetch(`http://localhost:8000/token-test/${ accessToken }`);
-      if (!tokenTest.ok) {
-        throw new Error("Token test failed");
-      }
-      const tokenTestResponse = await tokenTest.json();
-      console.log("current user check: ", currentUser);
-    }
-    console.log("fetching user creds")
-    userCreds();
-  }, []);
+  //     const tokenTest = await fetch(`http://localhost:8000/token-test/${ accessToken }`);
+  //     if (!tokenTest.ok) {
+  //       throw new Error("Token test failed");
+  //     }
+  //     const tokenTestResponse = await tokenTest.json();
+  //     console.log("current user check: ", currentUser);
+  //   }
+  //   console.log("fetching user creds")
+  //   userCreds();
+  // }, []);
 
   return (
     <SafeAreaView className="bg-blue-400 h-screen p-5 flex items-center">
