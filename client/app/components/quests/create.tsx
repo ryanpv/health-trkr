@@ -83,7 +83,7 @@ const AddQuestModal: React.FC<AddQuestModalProps> = () => {
   };
 
   return (
-    <View>
+    <View className="bottom-14 max-w-xl w-full absolute p-5">
       <View>
         <Modal
           visible={ modalVisible }
@@ -156,7 +156,7 @@ const AddQuestModal: React.FC<AddQuestModalProps> = () => {
         </Modal>
       </View>
 
-      <View>
+      <View className="">
         <TouchableOpacity 
           className="my-5"
           onPress={ () => setModalVisible(true) }

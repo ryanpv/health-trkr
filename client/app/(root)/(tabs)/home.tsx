@@ -17,7 +17,7 @@ import { Quest } from "@/types/quest.types";
 
 
 const Home = () => {
-  const [dailyGoalCount, setDailyGoalCount] = useState<number>(2);
+  const [dailyGoalCount, setDailyGoalCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
@@ -131,7 +131,7 @@ const Home = () => {
           </Text>
         </View>
         
-        <ScrollView className="max-h-[45vh]">
+        <ScrollView className="max-h-[45vh] pb-[80px]">
           <View className="gap-y-5">
             { !loading && questList?.length > 0 ?
               questList.map((quest) => (
@@ -177,12 +177,10 @@ const Home = () => {
             modalVisible={ confirmModalVisible }
           />
         </View>
-
-        <View>
-          <AddQuestModal />
-        </View>
-
       </View>
+
+      <AddQuestModal />
+    
     </SafeAreaView>
   );
 };
