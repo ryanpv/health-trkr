@@ -18,7 +18,12 @@ type QuestModalProps = {
 const QuestModal: React.FC<QuestModalProps> = ({ closeModal, openConfirmModal, modalVisible, questData }) => {
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
-  const { questList, setQuestList } = useStateContext();
+  const { 
+    questList, 
+    setQuestList,
+    dailyQuestCount,
+    setDailyQuestCount
+  } = useStateContext();
   const { setCurrentUser } = useAuthContext();
 
 
@@ -51,7 +56,8 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, openConfirmModal, m
         ...prev,
         totalPoints: prev.totalPoints += questData.points
       }));
-      
+      setDailyQuestCount(prev => prev + 1)
+
       closeModal();
     } catch (error: unknown) {
       console.log("Error completing quest: ", error)

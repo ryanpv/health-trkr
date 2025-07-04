@@ -17,11 +17,16 @@ import { Quest } from "@/types/quest.types";
 
 
 const Home = () => {
-  const [dailyGoalCount, setDailyGoalCount] = useState<number>(0);
+  // const [dailyGoalCount, setDailyGoalCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
-  const { questList, setQuestList } = useStateContext();
+  const { 
+    questList, 
+    setQuestList,
+    dailyQuestCount,
+    setDailyQuestCount 
+  } = useStateContext();
   const { currentUser } =  useAuthContext();
   const [questModalData, setQuestModalData] = useState<Quest>({
     title: '',
@@ -61,7 +66,7 @@ const Home = () => {
 
       if (dailyCountFetch.ok) {
         const result = await dailyCountFetch.json()
-        setDailyGoalCount(result.quests_completed_today)
+        setDailyQuestCount(result.quests_completed_today)
       }
     } catch (error) {
       console.log("Error checking completed daily quests: ", error);
@@ -126,7 +131,7 @@ const Home = () => {
 
         <View className="my-5 p-5 h-40 rounded-md shadow-lg bg-blue-200">
           <Text className="font-semibold">
-            {dailyGoalCount <= 5 ? dailyGoalCount : 5 } / 5 Daily
+            { dailyQuestCount <= 5 ? dailyQuestCount : 5 } / 5 Daily
             goals completed
           </Text>
         </View>
