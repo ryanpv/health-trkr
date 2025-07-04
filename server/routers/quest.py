@@ -1,4 +1,6 @@
-from typing import Optional
+from datetime import datetime, timezone
+from typing import Optional, Union
+from zoneinfo import ZoneInfo
 
 from auth.get_user_id import get_cached_uid
 from auth.verify_token_and_email import verify_token_and_email
@@ -7,6 +9,7 @@ from database import get_session
 from fastapi import APIRouter, Depends, HTTPException
 from models.quest import (
     Quest,
+    QuestCountResponse,
     QuestCreate,
     QuestCreateResponse,
     QuestDelete,
@@ -15,27 +18,39 @@ from models.quest import (
 from models.user import User
 from sqlalchemy import asc, desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql import func
 
 router = APIRouter()
 
-
-# GET *INCOMPLETE* QUESTS
-@router.get("/quests", response_model=list[QuestResponse], status_code=200)
+# GET QUESTS
+@router.get("/quests", response_model=Union[list[QuestResponse], QuestCountResponse], status_code=200)
 async def get_quests(
     status: Optional[str] = None,
+    daily_check: Optional[bool] = False,
     session: AsyncSession = Depends(get_session), uid: str = Depends(verify_token_and_email)
 ):
     try:
         user_id = await get_cached_uid(firebase_uid=uid)
+        curr_date = datetime.now(timezone.utc)
+        server_timezone = ZoneInfo("America/Toronto")
 
+        query_filter = [Quest.user_id == user_id]
+        
         if status:
+            query_filter.append(Quest.quest_status == status)
+            
+        # Check for daily completed
+        if status == "complete" and daily_check:
+            today = curr_date.astimezone(server_timezone).date()
+            query_filter.append(func.date(Quest.completed_at) == today) #type: ignore
+
             result = await session.execute(
-                select(Quest).where(Quest.user_id == user_id, Quest.quest_status == status).order_by(asc(Quest.date)) # type: ignore
+                select(Quest).where(*query_filter).order_by(asc(Quest.date)) # type: ignore
             )
             quests = result.scalars().all()
-            return quests
+            return {"quests_completed_today": len(quests)}
         else:
-            result = await session.execute(select(Quest).where(Quest.user_id == user_id)) # type: ignore
+            result = await session.execute(select(Quest).where(*query_filter)) # type: ignore
             quests = result.scalars().all()
             return quests
     except Exception as e:
