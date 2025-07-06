@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import Column, DateTime, text
 from sqlmodel import Field, SQLModel
@@ -18,4 +19,11 @@ class UserStats(SQLModel, table=True): # type: ignore
         sa_column=Column(DateTime(timezone=True), server_default=text("CURRENT_TIMESTAMP"))
     )
 
-# class UserStatsUpdate(UserStatsBase):
+
+class StatsUpdate(SQLModel):
+    id: Optional[int] = None
+    title: Optional[str] = None
+    quest_type: Optional[str] = None
+    quest_status: Optional[str] = None
+    date: Optional[datetime] = None
+    points: Optional[int] = None

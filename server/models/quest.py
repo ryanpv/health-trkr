@@ -48,11 +48,3 @@ class QuestResponse(SQLModel):
 
 class QuestCountResponse(SQLModel):
     quests_completed_today: int
-
-class QuestUpdate(SQLModel):
-    id: int
-    title: Optional[str] = None
-    quest_type: Optional[str] = None
-    quest_status: Optional[str] = None
-    date: Optional[datetime] = None
-    points: Optional[int] = None

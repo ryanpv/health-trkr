@@ -5,8 +5,8 @@ from auth.get_user_id import get_cached_uid
 from auth.verify_token_and_email import verify_token_and_email
 from database import get_session
 from fastapi import APIRouter, Body, Depends, HTTPException, status
-from models.quest import Quest, QuestUpdate
-from models.user_stats import UserStats
+from models.quest import Quest
+from models.user_stats import StatsUpdate, UserStats
 from sqlalchemy import insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.post("/user_stats", status_code=201)
 async def post_user_stats(
-  payload: QuestUpdate = Body(...),
+  payload: StatsUpdate = Body(...),
   uid=Depends(verify_token_and_email),
   session: AsyncSession = Depends(get_session),
 ):
