@@ -14,6 +14,7 @@ import QuestModal from "@/app/components/quests/questModal";
 import { useAuthContext } from "@/contexts/context";
 import ConfirmModal from "@/app/components/confirmModal";
 import { Quest } from "@/types/quest.types";
+import ClaimButton from "@/app/components/claimButton";
 
 
 const Home = () => {
@@ -39,7 +40,13 @@ const Home = () => {
   
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const credentials = FIREBASE_AUTH.currentUser;
-// get incomplete quests for this part
+
+  useEffect(() => {
+    getQuests();
+    checkDailyCompleted();
+  }, []); 
+
+
   const getQuests = async () => {
     setLoading(true);
     try {
@@ -52,6 +59,7 @@ const Home = () => {
       setLoading(false);
     }
   };
+
 
   const checkDailyCompleted = async () => {
     setLoading(true);
@@ -74,11 +82,7 @@ const Home = () => {
       setLoading(false);
     }
   };
-  
-  useEffect(() => {
-    getQuests();
-    checkDailyCompleted();
-  }, []);  
+   
   
   const deleteQuest = async(questId: number) => {
     try {
@@ -102,6 +106,8 @@ const Home = () => {
       console.log("Error: ", error)
     }
   };
+
+
 
   return (
     <SafeAreaView className="bg-gray-100 h-screen flex items-center p-5">
@@ -134,6 +140,7 @@ const Home = () => {
             { dailyQuestCount <= 5 ? dailyQuestCount : 5 } / 5 Daily
             goals completed
           </Text>
+            <ClaimButton bonusPoints={ 200 }/>
         </View>
         
         <ScrollView className="max-h-[45vh] pb-[80px]">
