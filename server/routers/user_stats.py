@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -6,11 +7,16 @@ from auth.verify_token_and_email import verify_token_and_email
 from database import get_session
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from models.quest import Quest
-from models.user_stats import StatsUpdate, UserStats
+from models.user_stats import BonusPointsUpdate, StatsUpdate, UserStats
 from sqlalchemy import insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+logger = logging.getLogger(__name__)
+
+
 router = APIRouter()
+
+
 
 
 @router.post("/user_stats", status_code=201)
@@ -106,3 +112,29 @@ async def post_user_stats(
       status_code=500, detail="Error receiving stats"
     )
 
+
+@router.post("/user_stats/bonus", status_code=201)
+async def add_bonus(
+    payload: BonusPointsUpdate,
+    uid=Depends(verify_token_and_email),
+    session: AsyncSession = Depends(get_session)
+):
+  try:
+    user_id = await get_cached_uid(firebase_uid=uid)
+
+    result = await session.execute(
+        update(UserStats)
+        .where(UserStats.user_id == user_id) # type: ignore
+        .values(total_points=UserStats.total_points + payload.points)
+    )
+    await session.commit()
+
+    if result.rowcount == 0:
+        raise HTTPException(status_code=404, detail="UserStats not found for user.")
+
+    return {"message": "Successfully added bonus points"}
+  except Exception as e:
+    logger.error("Error adding bonus points.", e)
+    raise HTTPException(
+      status_code=500, detail="Unable to add bonus points."
+    )
