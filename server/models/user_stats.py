@@ -21,9 +21,12 @@ class UserStats(SQLModel, table=True): # type: ignore
 
 
 class StatsUpdate(SQLModel):
-    id: Optional[int] = None
+    id: int
     title: Optional[str] = None
     quest_type: Optional[str] = None
     quest_status: Optional[str] = None
     date: Optional[datetime] = None
     points: Optional[int] = None
+
+class BonusPointsUpdate(SQLModel):
+    points: int
