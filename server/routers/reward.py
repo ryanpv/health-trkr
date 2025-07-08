@@ -47,7 +47,9 @@ async def get_rewards(
   user_id = await get_cached_uid(firebase_uid=uid)
 
   result = await session.execute(
-    select(Reward).where(Reward.user_id == user_id).order_by(asc(Reward.date)) # type: ignore
+    select(Reward)
+    .where(Reward.user_id == user_id, Reward.status == "not_redeemed") # type: ignore
+    .order_by(asc(Reward.date))  # type: ignore
   )
 
   rewards = result.scalars().all()
