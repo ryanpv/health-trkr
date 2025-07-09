@@ -18,6 +18,7 @@ class UserStats(SQLModel, table=True): # type: ignore
     last_weekly_completed: datetime = Field(
         sa_column=Column(DateTime(timezone=True), server_default=text("CURRENT_TIMESTAMP"))
     )
+    daily_bonus_claimed_at: Optional[datetime] = Field(default=None)
 
 
 class StatsUpdate(SQLModel):
