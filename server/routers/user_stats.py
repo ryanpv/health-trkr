@@ -8,31 +8,27 @@ from database import get_session
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from models.quest import Quest
 from models.user_stats import BonusPointsUpdate, StatsUpdate, UserStats
-from sqlalchemy import insert, select, update
+from sqlalchemy import func, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = logging.getLogger(__name__)
-
-
 router = APIRouter()
 
 
 
-
-@router.post("/user_stats", status_code=201)
+@router.post("/user_stats", status_code=200)
 async def post_user_stats(
   payload: StatsUpdate = Body(...),
   uid=Depends(verify_token_and_email),
   session: AsyncSession = Depends(get_session),
 ):
   try:
-    print(f"***points: {payload}")
     user_id = await get_cached_uid(firebase_uid=uid)
     curr_date = datetime.now(timezone.utc)
     server_timezone = ZoneInfo("America/Toronto")
 
     async with session.begin():
-      # Update quest status
+      # Check existence of quest to be updated
       quest_row = await session.execute(
         select(Quest).where(Quest.user_id == user_id, Quest.id == payload.id) # type: ignore
       ) 
@@ -57,12 +53,9 @@ async def post_user_stats(
           .values(**update_quest_row)
         )
 
-      print(f"QUEST ROW: {update_quest_row}")
-
       # Update user stats
       check_stats = await session.execute(select(UserStats).where(UserStats.user_id == user_id)) # type: ignore
       user_stats = check_stats.scalar_one_or_none()
-
 
       if not user_stats:
         new_stats = UserStats(
@@ -83,7 +76,6 @@ async def post_user_stats(
           user_stats.last_daily_completed 
           and (user_stats.last_daily_completed + timedelta(days=1)).date() < curr_date.astimezone(server_timezone).date()
         ):
-          print('*** DAILY STREAK IS BROKEN.')
           user_stats.current_daily_streak = 1
         elif (
           user_stats.last_daily_completed
@@ -91,7 +83,6 @@ async def post_user_stats(
         ):
           print("*** DAILY ALREADY COMPLETED.")
         else:
-          print("*** DAILY STREAK CONTINUES.")
           user_stats.current_daily_streak += 1
 
         user_stats.last_daily_completed = curr_date.astimezone(server_timezone)
@@ -99,12 +90,43 @@ async def post_user_stats(
         # Weekly streak update
         if user_stats.current_daily_streak > 7:
           user_stats.current_weekly_streak = user_stats.current_daily_streak // 7
-          print("*** WEEKLY STREAK CONTINUES")
         else:
           user_stats.current_weekly_streak = 1
-          print("*** WEEKLY STREAK STARTING")
            
         session.add(user_stats)
+
+        # Check if daily bonus can be claimed
+        today = curr_date.astimezone(server_timezone).date()
+        
+        # Query for quests completed today
+        completed_today_query = await session.execute(
+          select(Quest)
+          .where(
+            Quest.user_id == user_id, # type: ignore
+            Quest.quest_status == "complete", # type: ignore
+            func.date(Quest.completed_at) == today
+          )
+        )
+        min_daily_completed = len(completed_today_query.scalars().all()) >= 5
+        print(f"*** DAILY: {min_daily_completed}")
+        # Check if daily bonus has been claimed
+        daily_bonus_query = await session.execute(
+          select(UserStats)
+          .where(
+            UserStats.user_id == user_id, #type: ignore
+            func.date(UserStats.daily_bonus_claimed_at) == today
+          )
+        )
+
+        daily_bonus_claimed = daily_bonus_query.scalar_one_or_none()
+        print(f"*** DAILY BONUS CLAIMED? : {daily_bonus_claimed}")
+        can_claim_bonus = (min_daily_completed and (
+        daily_bonus_claimed is None or daily_bonus_claimed < today
+        ))
+
+        if can_claim_bonus:
+          return {"message": "OK", "can_claim_bonus": can_claim_bonus}
+
     return {"message": f"Successfully added {payload} points."}
   except Exception as e:
     print(f"Error receiving user stats: {e}")
