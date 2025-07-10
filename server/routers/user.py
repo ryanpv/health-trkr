@@ -56,25 +56,30 @@ async def create_user(
     uid: str = Depends(verify_token_basic),
 ):
   try:
-    # Check if user exists
-    result = await check_user_existence(session, user_data, uid)
-    if result:
-        raise HTTPException(
-        status_code=status.HTTP_409_CONFLICT,
-        detail=result
+    async with session.begin():
+      # Check if user already exists
+      result = await check_user_existence(session, user_data, uid)
+      if result:
+          raise HTTPException(
+          status_code=status.HTTP_409_CONFLICT,
+          detail=result
+        )
+      # Create row for user
+      user = User(
+        firebase_uid=uid,
+        email=user_data.email,
+        displayName=user_data.displayName
       )
+      session.add(user)
+      await session.flush()
 
-    user = User(
-      firebase_uid=uid,
-      email=user_data.email,
-      displayName=user_data.displayName
-    )
+      # Create row for user's stats
+      user_stats = UserStats(
+         user_id=user.id,
+      )
+      session.add(user_stats)
 
-    session.add(user)
-    await session.commit()
-    await session.refresh(user)
-
-    return { "message": "User created successfully", "user": user }   
+      return { "message": "User created successfully", "user": user }   
   except Exception as e:
     print(f"Error creating user: {e}")
     raise HTTPException(
