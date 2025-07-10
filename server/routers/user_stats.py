@@ -149,10 +149,10 @@ async def add_bonus(
         .where(UserStats.user_id == user_id) # type: ignore
         .values(total_points=UserStats.total_points + payload.points)
     )
-    await session.commit()
-
     if result.rowcount == 0:
         raise HTTPException(status_code=404, detail="UserStats not found for user.")
+
+    await session.commit()
 
     return {"message": "Successfully added bonus points"}
   except Exception as e:
