@@ -22,7 +22,9 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, openConfirmModal, m
     questList, 
     setQuestList,
     dailyQuestCount,
-    setDailyQuestCount
+    setDailyQuestCount,
+    canClaimBonus,
+    setCanClaimBonus
   } = useStateContext();
   const { setCurrentUser } = useAuthContext();
 
@@ -49,7 +51,9 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, openConfirmModal, m
       });
 
       if (!response.ok) throw new Error("Quest cannot be completed at this time.")
-        
+      
+      const result = await response.json()
+
       // Update quest list and user total points
       setQuestList((prev) => prev.filter(quest => quest.id !== questData.id));
       setCurrentUser((prev) => ({
@@ -57,6 +61,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ closeModal, openConfirmModal, m
         totalPoints: prev.totalPoints += questData.points
       }));
       setDailyQuestCount(prev => prev + 1)
+      setCanClaimBonus(result.can_claim_bonus)
 
       closeModal();
     } catch (error: unknown) {

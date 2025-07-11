@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, TouchableOpacity } from "react-native"
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { getUserAccessToken } from '@/utils/getAccessToken';
+import { useStateContext } from '@/contexts/stateContext';
 
 
 interface ClaimButtonProps {
@@ -12,6 +13,7 @@ interface ClaimButtonProps {
 const ClaimButton: React.FC<ClaimButtonProps> = ({ bonusPoints }) => {
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const [loading, setLoading] = useState(false);
+  const { canClaimBonus } = useStateContext();
   
   const claimBonus = async(bonusPoints: number) => {
     setLoading(true)
@@ -40,10 +42,17 @@ const ClaimButton: React.FC<ClaimButtonProps> = ({ bonusPoints }) => {
   return (
     <View className="flex-1 flex justify-end">
       <TouchableOpacity 
-        className="self-center px-4 py-1 border-2 border-blue-500 rounded-full"
+        className={
+          `self-center px-4 py-1 border-2 border-blue-500 rounded-full ${
+          canClaimBonus 
+          ? "border-blue-500"
+          : "border-gray-400 text-gray-400"
+          }`
+        }
         onPress={ () => claimBonus(bonusPoints) }
+        disabled={!canClaimBonus}
       >
-        <Text>Claim bonus!</Text>
+        <Text className={ !canClaimBonus ? "text-gray-400" : "text-blue-500"}>Claim bonus!</Text>
       </TouchableOpacity>
     </View>
   )
