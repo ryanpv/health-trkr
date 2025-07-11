@@ -118,16 +118,16 @@ async def post_user_stats(
           )
         )
 
-        daily_bonus_claimed = daily_bonus_query.scalar_one_or_none()
-        print(f"*** DAILY BONUS CLAIMED? : {daily_bonus_claimed}")
+        bonus_check = daily_bonus_query.scalar_one_or_none()
+
+        daily_bonus_claimed = bonus_check.daily_bonus_claimed_at if bonus_check else None
+
         can_claim_bonus = (min_daily_completed and (
-        daily_bonus_claimed is None or daily_bonus_claimed < today
+        daily_bonus_claimed is None or daily_bonus_claimed.date() < today
         ))
-
-        if can_claim_bonus:
-          return {"message": "OK", "can_claim_bonus": can_claim_bonus}
-
-    return {"message": f"Successfully added {payload} points."}
+        
+        return {"message": "OK", "can_claim_bonus": can_claim_bonus}
+    return {"message": f"Successfully added {payload.points} points.", "can_claim_bonus": False}
   except Exception as e:
     print(f"Error receiving user stats: {e}")
     raise HTTPException(
