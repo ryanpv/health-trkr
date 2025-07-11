@@ -36,14 +36,14 @@ async def get_user(
            raise HTTPException(status_code=404, detail="No available stats for user.")
 
         user_stats, email, display_name, last_daily_bonus = user_data
-        print(f"*** USER STATS: {user_stats}")
+
         return { "data": {
            "totalPoints": user_stats.total_points,
            "dailyStreak": user_stats.current_daily_streak,
            "weeklyStreak": user_stats.current_weekly_streak,
+           "lastDailyBonus": user_stats.daily_bonus_claimed_at,
            "email": email,
            "displayName": display_name,
-           "lastDailyBonus": last_daily_bonus
         } }
     except Exception as e:
         print(f"Unable to retrieve user: {e}")
