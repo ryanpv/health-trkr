@@ -143,11 +143,16 @@ async def add_bonus(
 ):
   try:
     user_id = await get_cached_uid(firebase_uid=uid)
+    curr_date = datetime.now(timezone.utc)
+    server_timezone = ZoneInfo("America/Toronto")
 
     result = await session.execute(
         update(UserStats)
         .where(UserStats.user_id == user_id) # type: ignore
-        .values(total_points=UserStats.total_points + payload.points)
+        .values(
+          total_points=UserStats.total_points + payload.points,
+          daily_bonus_claimed_at=curr_date.astimezone(server_timezone)
+        )
     )
     if result.rowcount == 0:
         raise HTTPException(status_code=404, detail="UserStats not found for user.")
