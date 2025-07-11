@@ -14,6 +14,8 @@ interface ContextType {
   setRewardList: Dispatch<SetStateAction<Reward[]>>,
   dailyQuestCount: number,
   setDailyQuestCount: Dispatch<SetStateAction<number>>
+  canClaimBonus: boolean,
+  setCanClaimBonus: Dispatch<SetStateAction<boolean>>
 };
 
 
@@ -23,6 +25,7 @@ export const StateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [questList, setQuestList] = useState<Quest[] | []>([]);
   const [rewardList, setRewardList] = useState<Reward[] | []>([]); 
   const [dailyQuestCount, setDailyQuestCount] = useState<number>(0);
+  const [canClaimBonus, setCanClaimBonus] = useState<boolean>(false);
 
   const values: ContextType = {
     questList,
@@ -30,7 +33,9 @@ export const StateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     rewardList,
     setRewardList,
     dailyQuestCount, 
-    setDailyQuestCount
+    setDailyQuestCount,
+    canClaimBonus,
+    setCanClaimBonus,
   };
 
   return (
