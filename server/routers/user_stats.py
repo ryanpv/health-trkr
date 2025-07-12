@@ -151,12 +151,14 @@ async def add_bonus(
     today = curr_date.astimezone(server_timezone).date()
 
     # Check if bonus already claimed
-    daily_bonus_claimed = await session.execute(
+    bonus_check = await session.execute(
       select(UserStats).where(
         UserStats.user_id == user_id, # type: ignore
         func.date(UserStats.daily_bonus_claimed_at) == today
       )
     )
+
+    daily_bonus_claimed = bonus_check.scalar_one_or_none()
 
     if daily_bonus_claimed:
       return JSONResponse(
@@ -178,7 +180,7 @@ async def add_bonus(
 
     await session.commit()
 
-    return {"message": "Successfully added bonus points"}
+    return {"message": "Successfully added bonus points", "can_claim_bonus": False}
   except Exception as e:
     logger.error("Error adding bonus points.", e)
     raise HTTPException(
