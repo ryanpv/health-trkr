@@ -6,6 +6,7 @@ from auth.get_user_id import get_cached_uid
 from auth.verify_token_and_email import verify_token_and_email
 from database import get_session
 from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from models.quest import Quest
 from models.user_stats import BonusPointsUpdate, StatsUpdate, UserStats
 from sqlalchemy import func, insert, select, update
@@ -108,7 +109,7 @@ async def post_user_stats(
           )
         )
         min_daily_completed = len(completed_today_query.scalars().all()) >= 5
-        print(f"*** DAILY: {min_daily_completed}")
+
         # Check if daily bonus has been claimed
         daily_bonus_query = await session.execute(
           select(UserStats)
@@ -117,14 +118,16 @@ async def post_user_stats(
             func.date(UserStats.daily_bonus_claimed_at) == today
           )
         )
-
         bonus_check = daily_bonus_query.scalar_one_or_none()
-
         daily_bonus_claimed = bonus_check.daily_bonus_claimed_at if bonus_check else None
-
         can_claim_bonus = (min_daily_completed and (
-        daily_bonus_claimed is None or daily_bonus_claimed.date() < today
+          daily_bonus_claimed is None 
+          or daily_bonus_claimed.date() < today
         ))
+
+        
+        # if daily_bonus_claimed is not None and daily_bonus_claimed.date() == today:
+        #   return {"message": "OK", "can_claim_bonus": can_claim_bonus}
         
         return {"message": "OK", "can_claim_bonus": can_claim_bonus}
     return {"message": f"Successfully added {payload.points} points.", "can_claim_bonus": False}
@@ -145,7 +148,23 @@ async def add_bonus(
     user_id = await get_cached_uid(firebase_uid=uid)
     curr_date = datetime.now(timezone.utc)
     server_timezone = ZoneInfo("America/Toronto")
+    today = curr_date.astimezone(server_timezone).date()
 
+    # Check if bonus already claimed
+    daily_bonus_claimed = await session.execute(
+      select(UserStats).where(
+        UserStats.user_id == user_id, # type: ignore
+        func.date(UserStats.daily_bonus_claimed_at) == today
+      )
+    )
+
+    if daily_bonus_claimed:
+      return JSONResponse(
+        status_code=400,
+        content={"message": "Bonus already claimed.", "can_claim_bonus": False}
+      )
+    
+    # Update user stats
     result = await session.execute(
         update(UserStats)
         .where(UserStats.user_id == user_id) # type: ignore
