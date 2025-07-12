@@ -13,7 +13,7 @@ interface ClaimButtonProps {
 const ClaimButton: React.FC<ClaimButtonProps> = ({ bonusPoints }) => {
   const serverUrl = process.env.EXPO_PUBLIC_DEV_SERVER;
   const [loading, setLoading] = useState(false);
-  const { canClaimBonus } = useStateContext();
+  const { canClaimBonus, setCanClaimBonus } = useStateContext();
   
   const claimBonus = async(bonusPoints: number) => {
     setLoading(true)
@@ -32,6 +32,8 @@ const ClaimButton: React.FC<ClaimButtonProps> = ({ bonusPoints }) => {
 
       if (!response.ok) throw new Error("Unable to claim bonus points.")
       
+      const result = await response.json();
+      setCanClaimBonus(result.can_claim_bonus) // Disable button after claim    
     } catch(error) {
       console.log("ERROR claiming bonus: ", error)
     } finally {
