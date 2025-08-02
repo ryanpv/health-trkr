@@ -4,6 +4,7 @@ import { useState } from "react";
 import  { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { useRouter } from "expo-router";
 
 type FormData = {
   name: string;
@@ -21,6 +22,7 @@ const Signup = () => {
       confirmPassword: ''
     }
   });
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
     try {
@@ -52,6 +54,8 @@ const Signup = () => {
 
         console.log("addUserToDatabase: ", addUserToDatabase);
       }
+
+      router.replace("/home");
     } catch (error) {
       console.log("error: ", error);
     }
