@@ -50,9 +50,18 @@ const Signup = () => {
             email: data.email,
             firebase_uid: user.uid
           })
-        })
+        });
 
-        console.log("addUserToDatabase: ", addUserToDatabase);
+        // Check success of user creation
+        if (!addUserToDatabase.ok) {
+          try {
+            await user.delete();
+            console.log("Removing user from firebase due to db operation failure");
+          } catch (error) {
+            console.log("Error deleting firebase user: ", error);
+          }
+          throw new Error(`Failed to create user: ${ addUserToDatabase.status }`);
+        }
       }
 
       router.replace("/home");
